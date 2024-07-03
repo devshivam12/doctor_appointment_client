@@ -43,7 +43,7 @@ const Home = () => {
     <>
       {/* ----hero section */}
       <section
-        className="hero_section md:pt-[60px] 2xl:h-[800px] md:px-[2.7rem] lg:px-[5rem]"
+        className="hero_section md:pt-[60px] md:px-[2.7rem] lg:px-[5rem] px-[1rem]"
       >
         <div className="container">
           <div className="flex flex-col lg:flex-row gap-[30px] md:gap-[60px] items-center justify-between">
@@ -86,7 +86,7 @@ const Home = () => {
             </div>
 
 
-            <div className="relative w-full lg:w-1/2 p-8 md:p-0 flex justify-center items-center">
+            <div className="relative w-full lg:w-1/2 p-8 md:p-0 sm:flex justify-center items-center">
               <div className="relative aspect-square w-[100%] max-w-[500px] flex justify-center items-center">
                 <img
                   src={heroImage}

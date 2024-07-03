@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 
 const About = () => {
   return (
-    <section className='md:px-[2.7rem] lg:px-[5rem]'>
+    <section className='md:px-[2.7rem] lg:px-[5rem] px-[1rem]'>
       <div className="container">
         <div className="flex items-start justify-between gap-[50px] lg:gap-[130px] xl:gap-[50px] flex-col lg:flex-row">
 

@@ -6,7 +6,7 @@ import FaqsCard from './FaqsCard'
 
 const Faqs = () => {
     return (
-        <section className='md:px-[2.7rem] lg:px-[5rem]'>
+        <section className='md:px-[2.7rem] lg:px-[5rem] px-[1rem]'>
             <div className="container">
                 <div className="flex justify-betweem gap-[50px] lg:gap-0">
                     <div className='w-1/2 hidden md:block'>

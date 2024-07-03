@@ -7,7 +7,7 @@ import avatarIcon from '../../assets/images/avatar-icon.png';
 
 const Feature = () => {
     return (
-        <section className='md:px-[2.7rem] lg:px-[5rem]'>
+        <section className='md:px-[2.7rem] lg:px-[5rem] px-[1rem]'>
             <div className="container">
                 <div className="flex items-center justify-between flex-col lg:flex-row">
 

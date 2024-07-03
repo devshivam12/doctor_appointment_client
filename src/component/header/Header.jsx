@@ -31,7 +31,7 @@ const Header = () => {
   };
 
   return (
-    <header className='header flex items-center sticky top-0 left-0 z-[99999] shadow-sm bg-white md:px-[2.7rem] lg:px-[5rem]'>
+    <header className='header flex items-center sticky top-0 left-0 z-[99999] shadow-sm bg-white md:px-[2.7rem] lg:px-[5rem] px-[1rem]'>
       <div className="container flex items-center justify-between ">
         {/* logo */}
         <div className='sm:mr-[2px]'>
@@ -77,7 +77,7 @@ const Header = () => {
       </div>
 
       {/* mobile menu */}
-      <div className={`navigation md:hidden fixed top-0 left-0 w-full h-full bg-white z-[9998] flex flex-col items-center justify-center transition-transform duration-300 ${menuOpen ? 'transform translate-x-0' : 'transform -translate-x-full'}`}>
+      <div className={`navigation px-[1rem] md:px-[0] md:hidden fixed top-0 left-0 w-full h-full bg-white z-[9998] flex flex-col items-center justify-center transition-transform duration-300 ${menuOpen ? 'transform translate-x-0' : 'transform -translate-x-full'}`}>
         <button className="absolute flex items-center justify-center top-10 right-5 text-3xl h-[2rem] w-[2rem] rounded-full bg-primaryColor" onClick={toggleMenu}>
           <BiX color='white' />
         </button>

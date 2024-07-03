@@ -10,7 +10,7 @@ const Expertise = () => {
 
   return (
     <section
-      className='md:px-[2.7rem] lg:px-[5rem]'
+      className='md:px-[2.7rem] lg:px-[5rem] px-[1rem]'
     >
       
       <div className="container">

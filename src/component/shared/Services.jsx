@@ -15,13 +15,13 @@ const Services = ({ sectionRef, scrollYProgress }) => {
     const scale = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
 
     return (
-        <>
+
             <motion.section
                 ref={sectionRef}
                 style={{
                     scale,
                 }}
-                className="py-12"
+                className="py-12 px-[1rem]"
             >
 
                 <div className="container mx-auto px-4 md:px-16">
@@ -51,7 +51,7 @@ const Services = ({ sectionRef, scrollYProgress }) => {
                     </div>
                 </div>
             </motion.section>
-        </>
+
     );
 };
 
