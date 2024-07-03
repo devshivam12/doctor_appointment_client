@@ -1,9 +1,4 @@
-import React, { useRef } from 'react';
-import { Pagination, Navigation } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
+import React, { useEffect, useState } from 'react';
 import { HiStar } from 'react-icons/hi';
 import patientAvatar from '../../assets/images/patient-avatar.png';
 
@@ -35,11 +30,44 @@ const Testimonials = () => {
         }
     ];
 
-    const prevRef = useRef(null);
-    const nextRef = useRef(null);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [visibleTestimonials, setVisibleTestimonials] = useState([]);
+
+    const getUpdatedTestimonials = () => {
+        const width = window.innerWidth;
+        let itemsToShow = 1;
+        if (width >= 1280) {
+            itemsToShow = 3;
+        } else if (width >= 1024) {
+            itemsToShow = 2;
+        }
+
+        const updatedTestimonials = [];
+        for (let i = 0; i < itemsToShow; i++) {
+            updatedTestimonials.push(testimonials[(currentIndex + i) % testimonials.length]);
+        }
+        setVisibleTestimonials(updatedTestimonials);
+    };
+
+    useEffect(() => {
+        getUpdatedTestimonials();
+        window.addEventListener('resize', getUpdatedTestimonials);
+
+        return () => {
+            window.removeEventListener('resize', getUpdatedTestimonials);
+        };
+    }, [currentIndex]);
+
+    const prevSlide = () => {
+        setCurrentIndex((prevIndex) => (prevIndex === 0 ? testimonials.length - 1 : prevIndex - 1));
+    };
+
+    const nextSlide = () => {
+        setCurrentIndex((prevIndex) => (prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1));
+    };
 
     return (
-        <section className='md:px-[2.7rem] lg:px-[5rem]'>
+        <section className='md:px-[2.7rem] lg:px-[5rem] px-[1rem]'>
             <div className="container relative">
                 <div className='xl:w-[500px] mx-auto'>
                     <h2 className='heading text-center'>
@@ -49,70 +77,46 @@ const Testimonials = () => {
                         World-class care for everyone. Our health systems offer unmatched, expert health care.
                     </p>
                 </div>
-                <div className='mt-[30px] lg:mt-[55px] px-[2rem] sm:px-[4rem] lg:px-[2rem]'>
-                    <Swiper
-                        spaceBetween={30}
-                        modules={[Pagination, Navigation]}
-                        slidesPerView={1}
-                        pagination={{ clickable: true }}
-                        navigation={{
-                            prevEl: prevRef.current,
-                            nextEl: nextRef.current,
-                        }}
-                        onInit={(swiper) => {
-                            swiper.params.navigation.prevEl = prevRef.current;
-                            swiper.params.navigation.nextEl = nextRef.current;
-                            swiper.navigation.init();
-                            swiper.navigation.update();
-                        }}
-                        breakpoints={{
-                            640: {
-                                slidesPerView: 1,
-                                spaceBetween: 0,
-                            },
-                            768: {
-                                slidesPerView: 2,
-                                spaceBetween: 20,
-                            },
-                            1024: {
-                                slidesPerView: 3,
-                                spaceBetween: 30,
-                            }
-                        }}
-                    >
-                        {testimonials.map((testimonial, index) => (
-                            <SwiperSlide key={index} className=''>
-                                <div className='h-[14rem] py-[2rem] px-5 rounded-lg border border-solid'>
-                                    <div className='flex items-center gap-[13px]'>
-                                        <img
-                                            loading='lazy'
-                                            src={patientAvatar}
-                                            alt="Patient Avatar"
-                                        />
-                                        <div>
-                                            <h4 className='text-[18px] leading-[30px] font-semibold text-headingColor'>
-                                                {testimonial.name}
-                                            </h4>
-                                            <div className="flex items-center gap-[2px]">
-                                                <HiStar className="text-yellowColor w-[18px] h-5" />
-                                                <HiStar className="text-yellowColor w-[18px] h-5" />
-                                                <HiStar className="text-yellowColor w-[18px] h-5" />
-                                                <HiStar className="text-yellowColor w-[18px] h-5" />
-                                                <HiStar className="text-yellowColor w-[18px] h-5" />
+                <div className='mt-[30px] lg:mt-[55px]'>
+                    <div className="flex flex-col items-center justify-center w-full relative">
+                        <div className="hidden lg:flex justify-between w-full absolute top-1/2 transform -translate-y-1/2 px-2">
+                            <button onClick={prevSlide} className="py-2 px-4 bg-primaryColor text-white cursor-pointer rounded-md hover:bg-blue-700">&lt;</button>
+                            <button onClick={nextSlide} className="py-2 px-4 bg-primaryColor text-white cursor-pointer rounded-md hover:bg-blue-700">&gt;</button>
+                        </div>
+                        <div className="flex justify-center">
+                            {visibleTestimonials.map((testimonial, index) => (
+                                <div key={index} className='w-full sm:w-[30rem] md:w-[30rem] lg:w-[25rem] flex items-center justify-center'>
+                                    <div className='h-[14rem] sm:mx-2 w-full md:w-[27rem] lg:w-[22rem] py-8 px-5 rounded-lg border border-solid'>
+                                        <div className='flex items-center gap-8'>
+                                            <img
+                                                loading='lazy'
+                                                src={patientAvatar}
+                                                alt="Patient Avatar"
+                                            />
+                                            <div>
+                                                <h4 className='text-lg font-semibold text-headingColor'>
+                                                    {testimonial.name}
+                                                </h4>
+                                                <div className="flex items-center gap-1">
+                                                    <HiStar className="text-yellow-500 w-5 h-5" />
+                                                    <HiStar className="text-yellow-500 w-5 h-5" />
+                                                    <HiStar className="text-yellow-500 w-5 h-5" />
+                                                    <HiStar className="text-yellow-500 w-5 h-5" />
+                                                    <HiStar className="text-yellow-500 w-5 h-5" />
+                                                </div>
                                             </div>
                                         </div>
+                                        <p className='text-base mt-4 text-textColor'>
+                                            {testimonial.review}
+                                        </p>
                                     </div>
-                                    <p className='text-[16px] leading-7 mt-4 text-textColor font-[400]'>
-                                        {testimonial.review}
-                                    </p>
                                 </div>
-                            </SwiperSlide>
-                        ))}
-                    </Swiper>
-                    {/* Navigation Buttons */}
-                    <div className="swiper-navigation-buttons">
-                        <div ref={prevRef} className="swiper-button-prev-custom">&lt;</div>
-                        <div ref={nextRef} className="swiper-button-next-custom">&gt;</div>
+                            ))}
+                        </div>
+                        <div className="mt-4 flex lg:hidden justify-center space-x-4">
+                            <button onClick={prevSlide} className="py-2 px-4 bg-primaryColor text-white cursor-pointer rounded-md hover:bg-blue-700">&lt;</button>
+                            <button onClick={nextSlide} className="py-2 px-4 bg-primaryColor text-white cursor-pointer rounded-md hover:bg-blue-700">&gt;</button>
+                        </div>
                     </div>
                 </div>
             </div>
