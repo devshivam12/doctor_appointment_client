@@ -88,7 +88,7 @@ const Testimonials = () => {
                                 {visibleTestimonials.map((testimonial, index) => (
                                     <div
                                         key={testimonial.name}
-                                        className='w-full sm:w-[30rem] md:w-[30rem] lg:w-[25rem] flex items-center justify-center'
+                                        className='w-full sm:w-[30rem] md:w-[30rem] lg:w-[22rem] md:px-[1rem] flex items-center justify-center'
                                     >
                                         <div className={`h-[14rem] sm:mx-2 w-full md:w-[27rem] lg:w-[22rem] py-8 px-5 rounded-lg border border-solid ${index === 1 ? 'scale-110 bg-primaryColor text-white shadow-xl' : ''}`}>
                                             <div className='flex items-center gap-8'>
