@@ -22,6 +22,7 @@ const Doctors = () => {
                     <motion.div
                         key={doctor.id}
                         whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+                        
                     >
                         <DoctorCard doctor={doctor} />
                     </motion.div>

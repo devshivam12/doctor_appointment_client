@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import { motion, useScroll } from 'framer-motion';
+import { motion } from 'framer-motion';
 import icon01 from '../../assets/images/icon01.png';
 import icon02 from '../../assets/images/icon02.png';
 import icon03 from '../../assets/images/icon03.png';
@@ -9,7 +9,9 @@ import { BsArrowRight } from 'react-icons/bs';
 const Expertise = () => {
 
   return (
-    <section
+    <motion.section
+    initial={{ opacity: 0, x: "-100%" }}
+    whileInView={{opacity : 1, x : 0}}
       className='md:px-[2.7rem] lg:px-[5rem] px-[1rem]'
     >
       
@@ -89,7 +91,7 @@ const Expertise = () => {
           </motion.div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
