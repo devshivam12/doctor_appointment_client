@@ -1,0 +1,1 @@
+import{j as s}from"./index-b03ec204.js";const e="/assets/giphy2-4cb8f8c9.webp",n=()=>s.jsx("div",{children:s.jsx("div",{className:"loading-gif flex items-center justify-center h-full",children:s.jsx("img",{src:e,className:"bg-transparent mix-blend-multiply",alt:"Loading..."})})});export{n as C};
