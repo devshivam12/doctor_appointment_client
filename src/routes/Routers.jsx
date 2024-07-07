@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, Component } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -33,28 +33,28 @@ const pageTransition = {
   duration: 0.5,
 };
 
-const Routers = () => {
-  const location = useLocation();
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
 
-  return (
-    <>
-      <Suspense fallback={<div><LoadingGif /></div>}>
-        <AnimatePresence mode='wait'>
-          <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
-            <Route path="/home" element={<PageWrapper><Home /></PageWrapper>} />
-            <Route path="/doctors" element={<PageWrapper><Doctors /></PageWrapper>} />
-            <Route path="/doctors/:id" element={<PageWrapper><DoctorDetails /></PageWrapper>} />
-            <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
-            <Route path="/register" element={<PageWrapper><Signup /></PageWrapper>} />
-            <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
-            <Route path="/services" element={<PageWrapper><Service /></PageWrapper>} />
-          </Routes>
-        </AnimatePresence>
-      </Suspense>
-    </>
-  );
-};
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error("ErrorBoundary caught an error", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <h1>Something went wrong.</h1>;
+    }
+
+    return this.props.children;
+  }
+}
 
 const PageWrapper = ({ children }) => (
   <motion.div
@@ -67,5 +67,30 @@ const PageWrapper = ({ children }) => (
     {children}
   </motion.div>
 );
+
+const Routers = () => {
+  const location = useLocation();
+
+  return (
+    <>
+      <Suspense fallback={<div><LoadingGif /></div>}>
+        <ErrorBoundary>
+          <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
+              <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
+              <Route path="/home" element={<PageWrapper><Home /></PageWrapper>} />
+              <Route path="/doctors" element={<PageWrapper><Doctors /></PageWrapper>} />
+              <Route path="/doctors/:id" element={<PageWrapper><DoctorDetails /></PageWrapper>} />
+              <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
+              <Route path="/register" element={<PageWrapper><Signup /></PageWrapper>} />
+              <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
+              <Route path="/services" element={<PageWrapper><Service /></PageWrapper>} />
+            </Routes>
+          </AnimatePresence>
+        </ErrorBoundary>
+      </Suspense>
+    </>
+  );
+};
 
 export default Routers;
