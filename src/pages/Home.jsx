@@ -4,9 +4,9 @@ import heroImage from '../assets/images/main-doctor.png';
 
 import Expertise from '../component/shared/Expertise';
 import About from '../component/shared/About';
-const Services = lazy(() => import('../component/shared/Services'));
+const ServiceList = lazy(() => import('../component/shared/ServiceList'));
 import Feature from '../component/shared/Feature';
-import Doctors from '../component/shared/Doctors';
+import DoctorList from '../component/shared/DoctorList';
 import Faqs from '../component/shared/Faqs';
 import Testimonials from '../component/shared/Testimonials';
 
@@ -136,12 +136,12 @@ const Home = () => {
       <About />
 
       <Suspense fallback={<ComponentLoading />}>
-        <Services sectionRef={sectionRef} scrollYProgress={scrollYProgress} />
+        <ServiceList sectionRef={sectionRef} scrollYProgress={scrollYProgress} />
       </Suspense>
 
       <Feature />
 
-      <Doctors />
+      <DoctorList />
 
       <Faqs />
 

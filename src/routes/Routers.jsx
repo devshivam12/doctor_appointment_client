@@ -1,6 +1,5 @@
 import React, { Suspense, lazy, Component } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
 
 const Home = lazy(() => import('../pages/Home'));
 const Service = lazy(() => import('../pages/Service'));
@@ -11,62 +10,9 @@ const Doctors = lazy(() => import('../pages/doctor/Doctors'));
 const DoctorDetails = lazy(() => import('../pages/doctor/DoctorDetails'));
 
 import LoadingGif from '../component/helper/LoadingGif';
-
-const pageVariants = {
-  initial: {
-    opacity: 0,
-    y: 50,
-  },
-  in: {
-    opacity: 1,
-    y: 0,
-  },
-  out: {
-    opacity: 0,
-    y: -50,
-  },
-};
-
-const pageTransition = {
-  type: 'tween',
-  ease: 'anticipate',
-  duration: 0.5,
-};
-
-class ErrorBoundary extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError(error) {
-    return { hasError: true };
-  }
-
-  componentDidCatch(error, errorInfo) {
-    console.error("ErrorBoundary caught an error", error, errorInfo);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return <h1>Something went wrong.</h1>;
-    }
-
-    return this.props.children;
-  }
-}
-
-const PageWrapper = ({ children }) => (
-  <motion.div
-    initial="initial"
-    animate="in"
-    exit="out"
-    variants={pageVariants}
-    transition={pageTransition}
-  >
-    {children}
-  </motion.div>
-);
+import MyAccount from '../dashboard/user-account/MyAccount';
+import Dashboard from '../dashboard/doctor-account/Dashboard';
+import ProtectedRoute from './ProtectedRoute';
 
 const Routers = () => {
   const location = useLocation();
@@ -74,20 +20,24 @@ const Routers = () => {
   return (
     <>
       <Suspense fallback={<div><LoadingGif /></div>}>
-        <ErrorBoundary>
-          <AnimatePresence mode="wait">
-            <Routes location={location} key={location.pathname}>
-              <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
-              <Route path="/home" element={<PageWrapper><Home /></PageWrapper>} />
-              <Route path="/doctors" element={<PageWrapper><Doctors /></PageWrapper>} />
-              <Route path="/doctors/:id" element={<PageWrapper><DoctorDetails /></PageWrapper>} />
-              <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
-              <Route path="/register" element={<PageWrapper><Signup /></PageWrapper>} />
-              <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
-              <Route path="/services" element={<PageWrapper><Service /></PageWrapper>} />
-            </Routes>
-          </AnimatePresence>
-        </ErrorBoundary>
+
+
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/doctors" element={<Doctors />} />
+          <Route path="/doctors/:id" element={<DoctorDetails />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Signup />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/services" element={<Service />} />
+          <Route path='/users/profile/me' element={<ProtectedRoute allowedRoles={['patient']}><MyAccount /></ProtectedRoute>} />
+
+          <Route path='/doctors/profile/me' element={<ProtectedRoute allowedRoles={['doctor']}><Dashboard /></ProtectedRoute>} />
+
+        </Routes>
+
+
       </Suspense>
     </>
   );

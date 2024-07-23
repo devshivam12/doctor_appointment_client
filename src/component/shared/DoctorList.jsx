@@ -4,7 +4,7 @@ import DoctorCard from './DoctorCard';
 import { motion } from 'framer-motion';
 
 
-const Doctors = () => {
+const DoctorList = () => {
     return (
         <section className='px-[1rem] md:px-[2.7rem] lg:px-[5rem]'>
             <div className="container">
@@ -32,4 +32,4 @@ const Doctors = () => {
     );
 };
 
-export default Doctors;
+export default DoctorList;

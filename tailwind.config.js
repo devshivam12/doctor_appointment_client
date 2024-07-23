@@ -13,7 +13,7 @@ export default {
       },
 
       boxShadow: {
-        panelShadow: "rgba(17, 12, 46, 0.15) 0px 48px 100px 0px",
+        panelShadow: "rgba(17, 12, 46, 0.15) 0px 40px 100px 0px",
         cardShadow: "rgba(1, 181, 197, 0.20) 1px 1px 40px",
       },
     },

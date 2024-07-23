@@ -4,7 +4,7 @@ import { services } from '../../assets/data/services';
 import { motion, useTransform } from 'framer-motion';
 
 
-const Services = ({ sectionRef, scrollYProgress }) => {
+const ServiceList = ({ sectionRef, scrollYProgress }) => {
 
     const [currentCardIndex, setCurrentCardIndex] = useState(0);
 
@@ -55,4 +55,4 @@ const Services = ({ sectionRef, scrollYProgress }) => {
     );
 };
 
-export default Services;
+export default ServiceList;

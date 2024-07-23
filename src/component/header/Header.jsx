@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Logo from '../../assets/images/image.png';
 import { NavLink, Link } from 'react-router-dom';
-import useImage from '../../assets/images/avatar-icon.png';
 import { BiMenu, BiX } from 'react-icons/bi';
+import { authContext } from '../../context/AuthContext';
 
 const navLinks = [
   {
@@ -25,6 +25,9 @@ const navLinks = [
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const { user, role, token } = useContext(authContext)
+  console.log(user)
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -56,19 +59,24 @@ const Header = () => {
 
         {/* nav right */}
         <div className="flex items-center gap-4">
-          <div className='hidden md:block'>
-            <Link to='/'>
-              <figure className='w-[35px] h-[35px] rounded-full cursor-pointer'>
-                <img src={useImage} alt="User" className='w-[3rem]' />
-              </figure>
-            </Link>
-          </div>
 
-          <Link to='/login'>
-            <button className='bg-primaryColor py-2 px-10 text-white font-[600] h-[44px] flex items-center justify-center rounded-[10px]'>
-              Login
-            </button>
-          </Link>
+          {token && user ? (
+            <div>
+              <Link to={`${role === 'doctor' ? '/doctors/profile/me' : '/users/profile/me'}`}>
+                <figure className='w-[35px] h-[35px] rounded-full cursor-pointer'>
+                  <img src={user?.photo} alt="User" className='w-[3rem]' />
+                </figure>
+             
+              </Link>
+            </div>
+          ) : (
+            <Link to='/login'>
+              <button className='bg-primaryColor py-2 px-10 text-white font-[600] h-[44px] flex items-center justify-center rounded-[10px]'>
+                Login
+              </button>
+            </Link>
+          )}
+
 
           <span className=' md:hidden' onClick={toggleMenu}>
             <BiMenu className='w-6 h-6 cursor-pointer' />
@@ -97,7 +105,7 @@ const Header = () => {
         <div className='md:hidden block'>
           <Link to='/'>
             <figure className='w-[4rem] h-[4rem] rounded-full cursor-pointer'>
-              <img src={useImage} alt="User" className='w-[7rem] ' />
+              <img src={user?.photo} alt="User" className='w-[7rem] ' />
             </figure>
           </Link>
         </div>

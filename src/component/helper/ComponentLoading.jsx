@@ -1,11 +1,11 @@
 import React from 'react'
-import Loading from '../../assets/images/giphy2.webp'
+import HashLoader from 'react-spinners/HashLoader'
 
 const ComponentLoading = () => {
     return (
-        <div>
+        <div className='mt-[5rem]'>
             <div className="loading-gif flex items-center justify-center h-full">
-                <img src={Loading} className="bg-transparent mix-blend-multiply" alt="Loading..." />
+                <HashLoader color='blue' />
             </div>
         </div>
     )
