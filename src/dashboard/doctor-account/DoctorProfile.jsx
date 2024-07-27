@@ -1,7 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AiOutlineDelete } from 'react-icons/ai'
+import uploadCloudinary from '../../utils/uploadCloudinary'
+import { json, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { BASE_URL, token } from '../../config'
+import HashLoader from 'react-spinners/HashLoader'
 
-const DoctorProfile = () => {
+const DoctorProfile = ({ doctorData,onUpdateProfile }) => {
+
+  const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
     name: '',
@@ -9,7 +16,7 @@ const DoctorProfile = () => {
     phone: '',
     bio: '',
     gender: '',
-    specilization: '',
+    specialization: '',
     ticketPrice: 0,
     qualifications: [{ startingDate: '', endingDate: '', degree: '', university: '' }],
     experiences: [{ startingDate: '', endingDate: '', position: '', hospital: '' }],
@@ -18,14 +25,179 @@ const DoctorProfile = () => {
     photo: null
   })
 
+  const [error, setError] = useState({})
+  const [loadingFile, setLoadingFile] = useState(false)
+  const [loadingSubmit, setLoadingSubmit] = useState(false)
+
+  useEffect(() => {
+    if (doctorData) {
+      setFormData({
+        ...doctorData,
+        photo: doctorData?.photo || null
+      })
+    }
+  }, [doctorData])
+
+  const validateForm = () => {
+    const newError = {}
+
+    if (!formData.name) newError.name = "Name field is required";
+
+    if (!formData.phone) newError.phone = "Phone field is required"
+
+    if (!formData.bio) newError.bio = "Bio field is required"
+
+    if (!formData.gender) newError.gender = "Gender field is required"
+
+    if (!formData.specialization) newError.specialization = "specialization field is required"
+
+    if (!formData.ticketPrice) newError.ticketPrice = "Ticket price required"
+
+    if (!formData.about) newError.about = "About field is required"
+
+    if (formData.qualifications.some(q => !q.startingDate || !q.endingDate || !q.degree || !q.university)) {
+      newError.qualifications = "All qualifications fields are required"
+    }
+
+    if (formData.experiences.some(e => !e.startingDate || !e.endingDate || !e.position || !e.hospital)) {
+      newError.experiences = "All experience fields is required"
+    }
+
+    if (formData.timeSlots.some(t => !t.day || !t.startingTime || !t.endingTime)) {
+      newError.timeSlots = "All time slots are required"
+
+    }
+    setError(newError);
+    return Object.keys(newError).length === 0;
+  }
+
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0]
+
+    if (file) {
+      setLoadingFile(true)
+
+      try {
+        const data = await uploadCloudinary(file)
+        setFormData({ ...formData, photo: data?.url })
+        setLoadingFile(false)
+      } catch (error) {
+        toast.error("Failed to upload file")
+        setLoadingFile(false)
+      }
+    }
 
   }
 
+  const updateProfileHandler = async (e) => {
+    e.preventDefault()
+    setLoadingSubmit(true)
+
+    if (!validateForm()) {
+      setLoadingSubmit(false)
+      return
+    };
+
+    try {
+      const res = await fetch(`${BASE_URL}/doctor/${doctorData._id}`, {
+        method: 'PUT',
+        headers: {
+          'content-type': "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(formData)
+      })
+
+      const result = await res.json()
+
+      if (!res.ok) {
+        throw Error(result.message)
+      }
+
+      toast.success(result.message)
+      onUpdateProfile()
+      setLoadingSubmit(false)
+    } catch (error) {
+      toast.error(error.message)
+      setLoadingSubmit(false)
+    }
+
+  }
+
+  // reusable function for adding items 
+
+  const addItem = (key, item) => {
+    setFormData(prevFormData => ({ ...prevFormData, [key]: [...prevFormData[key], item] }))
+  }
+
+  // reusable input change function 
+
+  const handleReusableInputChange = (key, index, e) => {
+    const { name, value } = e.target
+
+    setFormData(prevFormData => {
+      const updateItems = [...prevFormData[key]]
+
+      updateItems[index][name] = value
+
+      return {
+        ...prevFormData,
+        [key]: updateItems
+      }
+    })
+  }
+
+  // reusable delete function 
+
+  const deleteItem = (key, index) => {
+    setFormData(prevItem => ({ ...prevItem, [key]: prevItem[key].filter((_, i) => i !== index) }))
+  }
+
+  const addQualifications = (e) => {
+    e.preventDefault();
+
+    addItem('qualifications', {
+      startingDate: '', endingDate: '', degree: '', university: ''
+    })
+  }
+
+  const handleQualificationChange = (e, index) => {
+    handleReusableInputChange("qualifications", index, e)
+  }
+
+  const addExperience = (e) => {
+    e.preventDefault();
+
+    addItem('experiences', {
+      startingDate: '', endingDate: '', position: '', hospital: ''
+    })
+  }
+
+  const handleExperienceChange = (e, index) => {
+    handleReusableInputChange('experiences', index, e)
+  }
+
+  const addTimeslote = (e) => {
+    e.preventDefault()
+
+    addItem('timeSlots', {
+      day: '', startingTime: '', endingTime: ""
+    })
+  }
+
+  const handleTimeslotsChange = (e, index) => {
+    handleReusableInputChange('timeSlots', index, e)
+  }
+
+  const handleDelete = (key, index) => {
+
+    deleteItem(key, index)
+
+  }
   return (
     <div>
       <h2 className='text-headingColor font-bold text-[24px] leading-9 mb-10'>
@@ -43,6 +215,7 @@ const DoctorProfile = () => {
             placeholder='Full name'
             className='form_input'
           />
+          {error.name && <p className='text-red-400'>{error.name}</p>}
         </div>
 
         <div className='mb-5'>
@@ -68,6 +241,8 @@ const DoctorProfile = () => {
             onChange={handleInputChange}
             className='form_input'
           />
+          {error.phone && <p className='text-red-400'>{error.phone}</p>}
+
         </div>
 
         <div className='mb-5'>
@@ -80,10 +255,12 @@ const DoctorProfile = () => {
             className='form_input'
             maxLength={100}
           />
+          {error.bio && <p className='text-red-400'>{error.bio}</p>}
+
         </div>
 
         <div className='mb-5'>
-          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mb-[30px]'>
+          <div className='grid grid-cols-3 gap-5 mb-[30px]'>
             <div>
               <p className='form_label'>
                 Gender*
@@ -99,6 +276,8 @@ const DoctorProfile = () => {
                 <option value="female">Female</option>
                 <option value="other">Other</option>
               </select>
+              {error.gender && <p className='text-red-400'>{error.gender}</p>}
+
             </div>
 
             <div className='mb-5'>
@@ -106,8 +285,8 @@ const DoctorProfile = () => {
                 Specialization*
               </p>
               <select
-                name="specilization"
-                value={formData.specilization}
+                name="specialization"
+                value={formData.specialization}
                 onChange={handleInputChange}
                 className='form_input py-3.5'
               >
@@ -116,6 +295,9 @@ const DoctorProfile = () => {
                 <option value="neurologist">Neurologist</option>
                 <option value="dermatologist">Dermatologist</option>
               </select>
+
+              {error.specialization && <p className='text-red-400'>{error.specialization}</p>}
+
             </div>
 
             <div className='mb-5'>
@@ -128,18 +310,19 @@ const DoctorProfile = () => {
                 onChange={handleInputChange}
                 className='form_input'
               />
+              {error.ticketPrice && <p className='text-red-400'>{error.ticketPrice}</p>}
+
             </div>
 
           </div>
         </div>
-
         <div className="mb-5">
           <p className='form_label'>Qualifications*</p>
           {
             formData.qualifications?.map((item, index) => (
               <div key={index}>
                 <div>
-                  <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
+                  <div className='grid grid-cols-2 gap-5'>
                     <div>
                       <p className='form_label'>
                         Starting Date*
@@ -148,12 +331,8 @@ const DoctorProfile = () => {
                         type="date"
                         name='startingDate'
                         value={item.startingDate}
-                        onChange={e => {
-                          const newQualifications = [...formData.qualifications];
-                          newQualifications[index].startingDate = e.target.value;
-                          setFormData({ ...formData, qualifications: newQualifications });
-                        }}
                         className='form_input'
+                        onChange={e => handleQualificationChange(e, index)}
                       />
                     </div>
 
@@ -165,17 +344,13 @@ const DoctorProfile = () => {
                         type="date"
                         name='endingDate'
                         value={item.endingDate}
-                        onChange={e => {
-                          const newQualifications = [...formData.qualifications];
-                          newQualifications[index].endingDate = e.target.value;
-                          setFormData({ ...formData, qualifications: newQualifications });
-                        }}
                         className='form_input'
+                        onChange={(e) => handleQualificationChange(e, index)}
                       />
                     </div>
                   </div>
 
-                  <div className='grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5'>
+                  <div className='grid grid-cols-2 gap-5 mt-5'>
                     <div>
                       <p className='form_label'>
                         Degree*
@@ -184,12 +359,8 @@ const DoctorProfile = () => {
                         type="text"
                         name='degree'
                         value={item.degree}
-                        onChange={e => {
-                          const newQualifications = [...formData.qualifications];
-                          newQualifications[index].degree = e.target.value;
-                          setFormData({ ...formData, qualifications: newQualifications });
-                        }}
                         className='form_input'
+                        onChange={(e) => handleQualificationChange(e, index)}
                       />
                     </div>
 
@@ -201,35 +372,30 @@ const DoctorProfile = () => {
                         type="text"
                         name='university'
                         value={item.university}
-                        onChange={e => {
-                          const newQualifications = [...formData.qualifications];
-                          newQualifications[index].university = e.target.value;
-                          setFormData({ ...formData, qualifications: newQualifications });
-                        }}
                         className='form_input'
+                        onChange={(e) => handleQualificationChange(e, index)}
                       />
                     </div>
                   </div>
+                  {error.qualifications && <p className='text-red-400'>{error.qualifications}</p>}
                   <button
-                    type="button"
-                    onClick={() => {
-                      const newQualifications = formData.qualifications.filter((_, i) => i !== index);
-                      setFormData({ ...formData, qualifications: newQualifications });
-                    }}
-                    className='bg-red-600 p-2 rounded-full text-white text-[18px] mt-2 mb-[20px] cursor-pointer'
-                  >
+                    type='button'
+                    onClick={() => handleDelete('qualifications', index)}
+                    className='bg-red-600 p-2 rounded-full text-white text-[18px] mt-2 mb-[20px] cursor-pointer'>
                     <AiOutlineDelete />
                   </button>
+
+
+
                 </div>
               </div>
             ))
           }
 
           <button
-            type="button"
-            onClick={() => setFormData({ ...formData, qualifications: [...formData.qualifications, { startingDate: '', endingDate: '', degree: '', university: '' }] })}
-            className='bg-[#000] py-2 rounded btn text-white h-fit cursor-pointer'
-          >
+            type='button'
+            onClick={addQualifications}
+            className='bg-[#000] py-2 rounded btn text-white h-fit cursor-pointer'>
             Add Qualification
           </button>
         </div>
@@ -240,7 +406,7 @@ const DoctorProfile = () => {
             formData.experiences?.map((item, index) => (
               <div key={index}>
                 <div>
-                  <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
+                  <div className='grid grid-cols-2 gap-5'>
                     <div>
                       <p className='form_label'>
                         Starting Date*
@@ -249,12 +415,8 @@ const DoctorProfile = () => {
                         type="date"
                         name='startingDate'
                         value={item.startingDate}
-                        onChange={e => {
-                          const newExperiences = [...formData.experiences];
-                          newExperiences[index].startingDate = e.target.value;
-                          setFormData({ ...formData, experiences: newExperiences });
-                        }}
                         className='form_input'
+                        onChange={e => handleExperienceChange(e, index)}
                       />
                     </div>
 
@@ -266,17 +428,13 @@ const DoctorProfile = () => {
                         type="date"
                         name='endingDate'
                         value={item.endingDate}
-                        onChange={e => {
-                          const newExperiences = [...formData.experiences];
-                          newExperiences[index].endingDate = e.target.value;
-                          setFormData({ ...formData, experiences: newExperiences });
-                        }}
                         className='form_input'
+                        onChange={e => handleExperienceChange(e, index)}
                       />
                     </div>
                   </div>
 
-                  <div className='grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5'>
+                  <div className='grid grid-cols-2 gap-5 mt-5'>
                     <div>
                       <p className='form_label'>
                         Position*
@@ -285,12 +443,8 @@ const DoctorProfile = () => {
                         type="text"
                         name='position'
                         value={item.position}
-                        onChange={e => {
-                          const newExperiences = [...formData.experiences];
-                          newExperiences[index].position = e.target.value;
-                          setFormData({ ...formData, experiences: newExperiences });
-                        }}
                         className='form_input'
+                        onChange={e => handleExperienceChange(e, index)}
                       />
                     </div>
 
@@ -302,59 +456,50 @@ const DoctorProfile = () => {
                         type="text"
                         name='hospital'
                         value={item.hospital}
-                        onChange={e => {
-                          const newExperiences = [...formData.experiences];
-                          newExperiences[index].hospital = e.target.value;
-                          setFormData({ ...formData, experiences: newExperiences });
-                        }}
                         className='form_input'
+                        onChange={e => handleExperienceChange(e, index)}
                       />
                     </div>
                   </div>
+
+                  {error.experiences && <p className='text-red-400'>{error.experiences}</p>}
+
                   <button
-                    type="button"
-                    onClick={() => {
-                      const newExperiences = formData.experiences.filter((_, i) => i !== index);
-                      setFormData({ ...formData, experiences: newExperiences });
-                    }}
-                    className='bg-red-600 p-2 rounded-full text-white text-[18px] mt-2 mb-[20px] cursor-pointer'
-                  >
+                    type='button'
+                    onClick={() => handleDelete('experience', index)}
+                    className='bg-red-600 p-2 rounded-full text-white text-[18px] mt-2 mb-[20px] cursor-pointer'>
                     <AiOutlineDelete />
                   </button>
+
                 </div>
               </div>
             ))
           }
 
           <button
-            type="button"
-            onClick={() => setFormData({ ...formData, experiences: [...formData.experiences, { startingDate: '', endingDate: '', position: '', hospital: '' }] })}
-            className='bg-[#000] py-2 rounded btn text-white h-fit cursor-pointer'
-          >
+            type='button'
+            onClick={addExperience}
+            className='bg-[#000] py-2 rounded btn text-white h-fit cursor-pointer'>
             Add Experience
           </button>
         </div>
 
+
         <div className="mb-5">
-          <p className='form_label'>Time Slots*</p>
+          <p className='form_label'>Time Slote*</p>
           {
             formData.timeSlots?.map((item, index) => (
               <div key={index}>
                 <div>
-                  <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 mb-[30px]'>
+                  <div className='grid grid-cols-2 md:grid-cols-4 mb-[30px] gap-5'>
                     <div>
                       <p className='form_label'>
                         Day*
                       </p>
-                      <select
-                        name="day"
+                      <select name="day"
                         value={item.day}
-                        onChange={e => {
-                          const newTimeSlots = [...formData.timeSlots];
-                          newTimeSlots[index].day = e.target.value;
-                          setFormData({ ...formData, timeSlots: newTimeSlots });
-                        }}
                         className='form_input py-3.5'
+                        onChange={e => handleTimeslotsChange(e, index)}
                       >
                         <option value="">Select</option>
                         <option value="saturday">Saturday</option>
@@ -375,12 +520,8 @@ const DoctorProfile = () => {
                         type="time"
                         name='startingTime'
                         value={item.startingTime}
-                        onChange={e => {
-                          const newTimeSlots = [...formData.timeSlots];
-                          newTimeSlots[index].startingTime = e.target.value;
-                          setFormData({ ...formData, timeSlots: newTimeSlots });
-                        }}
                         className='form_input'
+                        onChange={e => handleTimeslotsChange(e, index)}
                       />
                     </div>
 
@@ -390,42 +531,38 @@ const DoctorProfile = () => {
                       </p>
                       <input
                         type="time"
+                        className='form_input'
                         name='endingTime'
                         value={item.endingTime}
-                        onChange={e => {
-                          const newTimeSlots = [...formData.timeSlots];
-                          newTimeSlots[index].endingTime = e.target.value;
-                          setFormData({ ...formData, timeSlots: newTimeSlots });
-                        }}
-                        className='form_input'
+                        onChange={e => handleTimeslotsChange(e, index)}
                       />
                     </div>
 
                     <div className='flex items-center'>
                       <button
-                        type="button"
-                        onClick={() => {
-                          const newTimeSlots = formData.timeSlots.filter((_, i) => i !== index);
-                          setFormData({ ...formData, timeSlots: newTimeSlots });
-                        }}
-                        className='bg-red-600 p-2 mt-6 rounded-full text-white text-[18px] cursor-pointer'
-                      >
+                        type='button'
+                        onClick={() => handleDelete('timeSlots', index)}
+                        className='bg-red-600 p-2 mt-6 rounded-full text-white text-[18px] cursor-pointer'>
                         <AiOutlineDelete />
                       </button>
                     </div>
                   </div>
+
+
                 </div>
               </div>
             ))
           }
-
+          {error.timeSlots && <p className='text-red-400'>{error.timeSlots}</p>}
           <button
-            type="button"
-            onClick={() => setFormData({ ...formData, timeSlots: [...formData.timeSlots, { day: '', startingTime: '', endingTime: '' }] })}
-            className='bg-[#000] py-2 rounded btn text-white h-fit cursor-pointer'
-          >
-            Add Time Slot
+            type='button'
+            onClick={addTimeslote}
+            className='bg-[#000] py-2 rounded btn text-white h-fit cursor-pointer'>
+            Add Timeslot
           </button>
+
+
+
         </div>
 
         <div className='mb-5'>
@@ -438,19 +575,32 @@ const DoctorProfile = () => {
             placeholder='Write about you'
             onChange={handleInputChange}
             className='form_input'
-          />
+          >
+
+          </textarea>
+
+          {error.about && <p className='text-red-400'>{error.about}</p>}
+
         </div>
 
         <div className="flex mb-5 items-center gap-3">
-          {formData.photo && (
-            <figure className='w-[60px] h-[60px] rounded-full border-2 border-solid border-primaryColor flex items-center justify-center'>
-              <img
-                src={formData.photo}
-                className='w-full rounded-full'
-                alt="Doctor's Profile"
-              />
-            </figure>
-          )}
+
+          {
+            loadingFile ? (<HashLoader size={35} color='blue' />) : (
+
+              formData.photo && (
+                <figure className='w-[60px] h-[60px] rounded-full border-2 border-solid border-primaryColor flex items-center justify-center'>
+
+                  <img
+                    src={formData.photo}
+                    className='w-full rounded-full'
+                  />
+
+                </figure>
+              )
+
+            )
+          }
 
           <div className='relative w-[130px] h-[50px]'>
             <input
@@ -472,11 +622,13 @@ const DoctorProfile = () => {
         </div>
 
         <div className='mt-7'>
-          <button 
-          type="submit"
-          onClick={updateProfileHandler}
-          className='bg-primaryColor text-white text-[18px] leading-[30px] w-full py-3 px-4 rounded-lg'>
-            Update Profile
+          <button
+            disabled={loadingSubmit && true}
+            type='submit'
+            onClick={updateProfileHandler}
+            className='text-[18px] leading-[30px] w-full py-3 px-4 rounded-lg bg-primaryColor text-white'
+          >
+            {loadingSubmit ? (<HashLoader size={35} color='#ffffff' />) : 'Update Profile'}
           </button>
         </div>
       </form>
