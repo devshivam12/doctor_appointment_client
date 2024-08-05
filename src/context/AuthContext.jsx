@@ -1,4 +1,4 @@
-import { useReducer, useEffect, createContext } from "react";
+import { useReducer, useEffect, createContext, useState } from "react";
 
 
 const getUserFromLocalStorage = () => {
@@ -21,12 +21,6 @@ export const authContext = createContext(initialState);
 
 const authReducer = (state, action) => {
     switch (action.type) {
-        // case "DATA_UPDATE":
-        //     return {
-        //         ...state,
-        //         user: action.payload.user,
-        //         token: action.payload.token,
-        //     }
         case 'LOGIN_START':
             return {
                 user: null,
@@ -55,16 +49,21 @@ const authReducer = (state, action) => {
 
 export const AuthContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(authReducer, initialState);
-
+    const [isInitialized, setIsInitialized] = useState(false)
+    
     useEffect(() => {
-
+        setIsInitialized(true)
         localStorage.setItem('user', JSON.stringify(state.user));
         localStorage.setItem('token', state.token || '');
         localStorage.setItem('role', state.role || '');
-    }, [state.user, state.token, state.role]);
+    }, [state]);
+
+    if(!isInitialized){
+        return <div>Loading....</div>
+    }
 
     return (
-        <authContext.Provider value={{ user: state.user, token: state.token, role: state.role, dispatch }}>
+        <authContext.Provider value={{ ...state, dispatch }}>
             {children}
         </authContext.Provider>
     );

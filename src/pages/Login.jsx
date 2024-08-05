@@ -50,14 +50,14 @@ const Login = () => {
         type: 'LOGIN_SUCCESS',
         payload: {
           user: result.data,
-          role: result.role,
           token: result.token,
+          role: result.role,
         }
       });
-
-      console.log(result);
-      setLoading(false);
+      // console.log("Login token",token)
       toast.success(result.message);
+      setLoading(false);
+
       navigate('/');
 
     } catch (error) {
@@ -65,6 +65,22 @@ const Login = () => {
       setLoading(false);
     }
   }
+
+  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OTNhYjExYWNkOWY4N2Y0ZjQyZWVlZSIsInJvbGUiOiJkb2N0b3IiLCJpYXQiOjE3MjI2OTQ4NDUsImV4cCI6MTcyMzk5MDg0NX0.YaCI3BrxQpg1sQCs8D_auHsaNLDm4SScAHu_1vZJFWg
+
+  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OTNhYjExYWNkOWY4N2Y0ZjQyZWVlZSIsInJvbGUiOiJkb2N0b3IiLCJpYXQiOjE3MjI2OTQ4NDUsImV4cCI6MTcyMzk5MDg0NX0.YaCI3BrxQpg1sQCs8D_auHsaNLDm4SScAHu_1vZJFWg
+
+  // for patient : - eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OTNhYjExYWNkOWY4N2Y0ZjQyZWVlZSIsInJvbGUiOiJkb2N0b3IiLCJpYXQiOjE3MjI2OTM1MTAsImV4cCI6MTcyMzk4OTUxMH0.M-YON3i1JjrEZOQtIVJy89Tjwc4UYY-fprZvF8rMBL8
+
+  // patient localStorage = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OTVlYTI4ZWY0NjAxZjJiYTQ1M2UyYiIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzIyNjkzNjEwLCJleHAiOjE3MjM5ODk2MTB9.3sge79FB6xbpItRr8DOuShE07wG8hi_K6lCYnYxa8Qk
+
+  // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OTNhYjExYWNkOWY4N2Y0ZjQyZWVlZSIsInJvbGUiOiJkb2N0b3IiLCJpYXQiOjE3MjI2OTM5MjcsImV4cCI6MTcyMzk4OTkyN30.U1paKxahj9P_iMWs_uMRQEnyVksOUKiMxq6SWT_NWEg
+
+  // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OTNhYjExYWNkOWY4N2Y0ZjQyZWVlZSIsInJvbGUiOiJkb2N0b3IiLCJpYXQiOjE3MjI2OTM5MjcsImV4cCI6MTcyMzk4OTkyN30.U1paKxahj9P_iMWs_uMRQEnyVksOUKiMxq6SWT_NWEg
+
+  // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OTVlYTI4ZWY0NjAxZjJiYTQ1M2UyYiIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzIyNjk0MzY2LCJleHAiOjE3MjM5OTAzNjZ9.dzRGCEHTAJQTqolIKKZqQL8uRKLVoPVxjLowATltXE8
+
+  // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OTVlYTI4ZWY0NjAxZjJiYTQ1M2UyYiIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzIyNjk0MzY2LCJleHAiOjE3MjM5OTAzNjZ9.dzRGCEHTAJQTqolIKKZqQL8uRKLVoPVxjLowATltXE8
 
   return (
     <section className='px-5 lg:px-0'>

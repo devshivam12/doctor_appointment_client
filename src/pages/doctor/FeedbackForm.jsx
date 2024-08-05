@@ -1,10 +1,53 @@
 import React, { useState } from 'react'
 import { AiFillStar } from 'react-icons/ai'
+import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { BASE_URL, token } from '../../config'
+import HashLoader from 'react-spinners/HashLoader'
 
-const FeedbackForm = () => {
+
+const FeedbackForm = ({onUpdateFeddback}) => {
     const [rating, setRating] = useState(0)
     const [hover, setHover] = useState(0)
     const [reviewText, setReviewText] = useState('')
+    const [loading, setLoading] = useState(false)
+
+    const { id } = useParams()
+
+    const handleSubmitReview = async (e) => {
+        e.preventDefault()
+        setLoading(true)
+        try {
+            if (!rating || !reviewText) {
+                setLoading(false)
+                return toast.error('Rating & Review fields are required')
+            }
+
+            const response = await fetch(`${BASE_URL}/doctor/${id}/review`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ rating, reviewText })
+            })
+
+            const result = await response.json()
+
+            if (!response.ok) {
+                throw new Error(result.message)
+            }
+
+            setLoading(false)
+            toast.success(result.message)
+            onUpdateFeddback()
+        } catch (error) {
+            setLoading(false)
+            toast.error(error.message)
+            console.log(error)
+        }
+    }
+
     return (
         <form action=''>
             <div>
@@ -45,13 +88,18 @@ const FeedbackForm = () => {
                     className='border border-solid border-[#0066ff34] focus:outline outline-primaryColor w-full px-4 py-3 rounded-md'
                     rows={5}
                     placeholder='Write your message'
+                    value={reviewText}
                     onChange={(e) => setReviewText(e.target.value)}
                 >
 
                 </textarea>
             </div>
-            <button type='submit' className='btn'>
-                Submit Feedback
+            <button
+                disabled={loading && true}
+                onClick={handleSubmitReview}
+                type='submit'
+                className='btn'>
+                {loading ? <HashLoader size={35} color='#fff' /> : "Submit Review"}
             </button>
         </form>
     )

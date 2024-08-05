@@ -28,6 +28,7 @@ const Header = () => {
 
   const { user, role, token } = useContext(authContext)
   console.log(user)
+  console.log('token', token)
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -66,7 +67,7 @@ const Header = () => {
                 <figure className='w-[35px] h-[35px] rounded-full cursor-pointer'>
                   <img src={user?.photo} alt="User" className='w-[3rem]' />
                 </figure>
-             
+
               </Link>
             </div>
           ) : (

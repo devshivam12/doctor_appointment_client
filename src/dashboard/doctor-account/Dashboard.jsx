@@ -9,11 +9,12 @@ import starIcon from '../../assets/images/Star.png'
 import DoctorAbout from '../../pages/doctor/DoctorAbout'
 import DoctorProfile from './DoctorProfile'
 import { useNavigate } from 'react-router-dom'
+import Appointment from './Appointment'
 
 const Dashboard = () => {
 
   const { data, loading, error, fetchData } = useFetchData(`${BASE_URL}/doctor/profile/me`)
-  // const [tab, setTab] = useState('overview')
+  
   const [activeTab, setActiveTab] = useState('overview')
   const navigate = useNavigate()
 
@@ -111,9 +112,7 @@ const Dashboard = () => {
                   )}
 
                   {activeTab === "appointments" && (
-                    <div>
-                      Appointments
-                    </div>
+                    <Appointment appointments={data.appointments} />
                   )}
 
                   {activeTab === "settings" && (
