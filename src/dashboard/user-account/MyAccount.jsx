@@ -33,9 +33,9 @@ const MyAccount = () => {
           loading && !error && <ComponentLoading />
         }
 
-{
-  error && !loading && <Error errorMsg={error} />
-}
+        {
+          error && !loading && <Error errorMsg={error} />
+        }
 
         {
           !loading && !error && (

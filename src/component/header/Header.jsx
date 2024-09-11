@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Logo from '../../assets/images/image.png';
 import { NavLink, Link } from 'react-router-dom';
 import { BiMenu, BiX } from 'react-icons/bi';
@@ -25,10 +25,19 @@ const navLinks = [
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const { user, role, token } = useContext(authContext)
   console.log(user)
   console.log('token', token)
+
+  useEffect(() => {
+    if(token || user) {
+      setIsAuthenticated(true)
+    }
+    else{
+      setIsAuthenticated(false)
+    }
+  }, [token, user])
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -63,7 +72,7 @@ const Header = () => {
 
           {token && user ? (
             <div>
-              <Link to={`${role === 'doctor' ? '/doctors/profile/me' : '/users/profile/me'}`}>
+              <Link to={`${role === 'doctor' ? '/doctor/profile/me' : '/user/profile/me'}`}>
                 <figure className='w-[35px] h-[35px] rounded-full cursor-pointer'>
                   <img src={user?.photo} alt="User" className='w-[3rem]' />
                 </figure>

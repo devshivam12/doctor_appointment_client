@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 
 const Tabs = ({ tab, setTab }) => {
 
-    const {dispatch} = useContext(authContext)
+    const { dispatch } = useContext(authContext)
 
     const navigate = useNavigate()
 
