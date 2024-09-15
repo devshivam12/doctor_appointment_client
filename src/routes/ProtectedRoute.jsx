@@ -1,13 +1,13 @@
 import React, { useContext } from 'react'
-import { authContext } from '../context/AuthContext'
+// import { authContext } from '../context/AuthContext'
 import { Navigate } from 'react-router-dom';
 import HashLoader from 'react-spinners/HashLoader';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
-    const { token, role } = useContext(authContext)
+    // const { token, role } = useContext(authContext)
 
     if(!token){
-        return <div><HashLoader size={35} color='#ffffff' /></div>
+        return <Navigate to='/login' replace={true} />;
     }
 
     const isAllowed = allowedRoles.includes(role);

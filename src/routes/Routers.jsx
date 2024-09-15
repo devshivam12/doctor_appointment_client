@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, Component } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, BrowserRouter } from 'react-router-dom';
 
 const Home = lazy(() => import('../pages/Home'));
 const Service = lazy(() => import('../pages/Service'));
@@ -19,26 +19,24 @@ const Routers = () => {
 
   return (
     <>
-      <Suspense fallback={<div><LoadingGif /></div>}>
 
+        <Suspense fallback={<div><LoadingGif /></div>}>
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            {/* <Route path="/doctors" element={<Doctors />} />
+            <Route path="/doctors/:id" element={<DoctorDetails />} /> */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Signup />} />
+            {/* <Route path="/contact" element={<Contact />} />
+            <Route path="/services" element={<Service />} />
+            <Route path='/user/profile/me' element={<ProtectedRoute allowedRoles={['patient']}><MyAccount /></ProtectedRoute>} />
 
-        <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/doctors" element={<Doctors />} />
-          <Route path="/doctors/:id" element={<DoctorDetails />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Signup />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/services" element={<Service />} />
-          <Route path='/user/profile/me' element={<ProtectedRoute allowedRoles={['patient']}><MyAccount /></ProtectedRoute>} />
+            <Route path='/doctor/profile/me' element={<ProtectedRoute allowedRoles={['doctor']}><Dashboard /></ProtectedRoute>} /> */}
 
-          <Route path='/doctor/profile/me' element={<ProtectedRoute allowedRoles={['doctor']}><Dashboard /></ProtectedRoute>} />
+          </Routes>
+        </Suspense>
 
-        </Routes>
-
-
-      </Suspense>
     </>
   );
 };

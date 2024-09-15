@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import userImg from '../../assets/images/doctor-img01.png'
-import { authContext } from '../../context/AuthContext'
+// import { authContext } from '../../context/AuthContext'
 
 import MyBookings from './MyBookings'
 import MySettings from './MySettings'
@@ -13,7 +13,7 @@ import Error from '../../component/error/Error'
 
 const MyAccount = () => {
 
-  const { dispatch } = useContext(authContext)
+  // const { dispatch } = useContext(authContext)
   const [tab, setTab] = useState('bookings')
 
   const handleLogout = () => {

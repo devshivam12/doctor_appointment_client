@@ -7,7 +7,7 @@ const useFetchData = (url) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        if(!token){
+        if (!token) {
             setLoading(false)
         }
     })
@@ -18,6 +18,7 @@ const useFetchData = (url) => {
         try {
             const response = await fetch(url, {
                 headers: {
+                    Accept: "application/json",
                     'content-type': "application/json",
                     Authorization: `Bearer ${token}`
                 }

@@ -2,7 +2,8 @@ import React, { useState, useContext, useEffect } from 'react';
 import Logo from '../../assets/images/image.png';
 import { NavLink, Link } from 'react-router-dom';
 import { BiMenu, BiX } from 'react-icons/bi';
-import { authContext } from '../../context/AuthContext';
+import { useSelector } from 'react-redux';
+// import { authContext } from '../../context/AuthContext';
 
 const navLinks = [
   {
@@ -25,19 +26,22 @@ const navLinks = [
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const { user, role, token } = useContext(authContext)
-  console.log(user)
-  console.log('token', token)
 
-  useEffect(() => {
-    if(token || user) {
-      setIsAuthenticated(true)
-    }
-    else{
-      setIsAuthenticated(false)
-    }
-  }, [token, user])
+  // const { role } = useSelector((state) => state.auth)
+
+
+  // const { user, role, token } = useContext(authContext)
+  // console.log(user)
+  // console.log('token', token)
+
+  // useEffect(() => {
+  //   if(token || user) {
+  //     setIsAuthenticated(true)
+  //   }
+  //   else{
+  //     setIsAuthenticated(false)
+  //   }
+  // }, [token, user])
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -69,24 +73,19 @@ const Header = () => {
 
         {/* nav right */}
         <div className="flex items-center gap-4">
+          <div>
+            {/* <Link to={`${role === 'doctor' ? '/doctor/profile/me' : '/user/profile/me'}`}> */}
+              <figure className='w-[35px] h-[35px] rounded-full cursor-pointer'>
+                {/* <img src={user?.photo} alt="User" className='w-[3rem]' /> */}
+              </figure>
 
-          {token && user ? (
-            <div>
-              <Link to={`${role === 'doctor' ? '/doctor/profile/me' : '/user/profile/me'}`}>
-                <figure className='w-[35px] h-[35px] rounded-full cursor-pointer'>
-                  <img src={user?.photo} alt="User" className='w-[3rem]' />
-                </figure>
-
-              </Link>
-            </div>
-          ) : (
-            <Link to='/login'>
-              <button className='bg-primaryColor py-2 px-10 text-white font-[600] h-[44px] flex items-center justify-center rounded-[10px]'>
-                Login
-              </button>
-            </Link>
-          )}
-
+            {/* </Link> */}
+          </div>
+          <Link to='/login'>
+            <button className='bg-primaryColor py-2 px-10 text-white font-[600] h-[44px] flex items-center justify-center rounded-[10px]'>
+              Login
+            </button>
+          </Link>
 
           <span className=' md:hidden' onClick={toggleMenu}>
             <BiMenu className='w-6 h-6 cursor-pointer' />
@@ -115,7 +114,7 @@ const Header = () => {
         <div className='md:hidden block'>
           <Link to='/'>
             <figure className='w-[4rem] h-[4rem] rounded-full cursor-pointer'>
-              <img src={user?.photo} alt="User" className='w-[7rem] ' />
+              {/* <img src={user?.photo} alt="User" className='w-[7rem] ' /> */}
             </figure>
           </Link>
         </div>
