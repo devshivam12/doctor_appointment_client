@@ -10,6 +10,9 @@ import HashLoader from 'react-spinners/HashLoader'
 
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
+import { useDispatch } from 'react-redux'
+import { userExists, userNotExists } from '../redux/reducers/auth'
+import axios from 'axios'
 
 const Signup = () => {
 
@@ -29,6 +32,7 @@ const Signup = () => {
   })
 
   const [password, setPassword] = useState(true)
+  const dispatch = useDispatch()
 
   const handleChange = (e) => {
     setRegisterData({ ...registerData, [e.target.name]: e.target.value })
@@ -49,30 +53,31 @@ const Signup = () => {
 
     setLoading(true)
     e.preventDefault()
-
+    const toastId = toast.loading("Watting....")
     try {
-      const res = await fetch(`${BASE_URL}/auth/register`, {
-        method: 'post',
+
+      const config = {
+        withCredentials: true,
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(registerData)
-      })
+      };
 
-      const data = await res.json()
+      const res = await axios.post(`${BASE_URL}/auth/register`, registerData, config)
+      console.log(res)
+      dispatch(userExists(res.data.user))
+      toast.update(toastId, { render: res.data.message, type: "success", isLoading: false, autoClose: 3000 });
 
-      if (!res.ok) {
-        throw new Error(data.message)
+      if (res.status === 201) {
+        navigate('/login')
       }
 
-      setLoading(false);
-      toast.success(data.message)
-      navigate('/login')
-
-      console.log(data)
-
     } catch (error) {
-      toast.error(error.message)
+      toast.update(toastId, { render: error?.res?.data?.message || "Something went wrong", type: "error", isLoading: false, autoClose: 3000 });
+      dispatch(userNotExists())
+      console.log(error)
+    }
+    finally {
       setLoading(false)
     }
   }

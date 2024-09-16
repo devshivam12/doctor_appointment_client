@@ -3,7 +3,7 @@
 const getOrSavedFromStorage = ({ key, value, get }) => {
     if (get) {
         const storedValue = localStorage.getItem(key);
-
+        console.log(storedValue)
         if (storedValue) {
             try {
                 return JSON.parse(storedValue)
@@ -17,7 +17,11 @@ const getOrSavedFromStorage = ({ key, value, get }) => {
         }
     }
     else {
-        localStorage.setItem(key, JSON.stringify(value));
+        try {
+            localStorage.setItem(key, JSON.stringify(value));
+        } catch (error) {
+            console.error(`Error setting value in localStorage for key ${key}:`, error);
+        }
     }
 }
 

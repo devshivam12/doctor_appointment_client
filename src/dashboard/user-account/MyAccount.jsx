@@ -5,8 +5,8 @@ import userImg from '../../assets/images/doctor-img01.png'
 import MyBookings from './MyBookings'
 import MySettings from './MySettings'
 
-import useFetchData from '../../hooks/useFetchData'
-import { BASE_URL } from '../../config'
+// import useFetchData from '../../hooks/useFetchData'
+// import { BASE_URL } from '../../config'
 
 import ComponentLoading from '../../component/helper/ComponentLoading'
 import Error from '../../component/error/Error'
@@ -22,7 +22,7 @@ const MyAccount = () => {
     })
   }
 
-  const { data: userData, loading, error } = useFetchData(`${BASE_URL}/user/profile/me`)
+  // const { data: userData, loading, error } = useFetchData(`${BASE_URL}/user/profile/me`)
 
 
   return (

@@ -8,21 +8,16 @@ import axios from 'axios';
 
 function App() {
 
-  // const { user, loader, role } = useSelector((state => state.auth))
-  // const dispatch = useDispatch()
+  const { user, role, loader } = useSelector((state => state.auth))
+  const dispatch = useDispatch()
+  console.log(user)
+  useEffect(() => {
+    axios.get(`${BASE_URL}/user/profile/me`, { withCredentials: true })
+      .then((res) => dispatch(userExists(res.data.user)))
+      .catch((error) => dispatch(userNotExists()))
+  }, [dispatch])
 
-  // useEffect(() => {
-  //   if (role === 'patient') {
-  //     axios.get(`${BASE_URL}/user/profile/me`, { withCredentials: true })
-  //       .then((res) => dispatch(userExists(res.data.user)))
-  //       .catch((err) => dispatch(userNotExists()))
-  //   }
-  //   else if (role === 'doctor') {
-  //     axios.get(`${BASE_URL}/doctor/profile/me`, { withCredentials: true })
-  //       .then((res) => dispatch(userExists(res.data.user)))
-  //       .catch((err) => dispatch(userNotExists()))
-  //   }
-  // }, [dispatch, role])
+  
   return (
     <>
       <Layout />

@@ -46,11 +46,12 @@ const Login = () => {
       };
 
       const response = await axios.post(`${BASE_URL}/auth/login`, formData, config);
+      console.log(response.data.user)
 
-      dispatch(userExists(response.data.user));
-      toast.update(toastId, { render: response.data.message, type: "success", isLoading: false, autoClose: 3000 });
 
       // Use response.status to check if the login was successful
+      dispatch(userExists(response.data.user));
+      // console.log(response.data.user.role)
       if (response.status === 200) {
         if (response.data.user.role) {
           getOrSavedFromStorage({
@@ -59,6 +60,7 @@ const Login = () => {
             get: false,
           });
         }
+        toast.update(toastId, { render: response.data.message, type: "success", isLoading: false, autoClose: 3000 });
         navigate('/'); // Redirect if successful
       }
     } catch (error) {
