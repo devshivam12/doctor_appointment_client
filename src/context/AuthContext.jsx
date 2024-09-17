@@ -1,70 +1,75 @@
-import { useReducer, useEffect, createContext, useState } from "react";
+// import { useReducer, useEffect, createContext, useState } from "react";
 
 
-const getUserFromLocalStorage = () => {
-    try {
-        const user = localStorage.getItem('user');
-        return user ? JSON.parse(user) : null;
-    } catch (error) {
-        console.error("Failed to parse user from localStorage", error);
-        return null;
-    }
-};
+// const initialState = {
+//     token: localStorage.getItem('token') || null,
+//     user: JSON.parse(localStorage.getItem('user')) || null,
+//     role: localStorage.getItem('role') || null,
+// };
 
-const initialState = {
-    user: getUserFromLocalStorage(),
-    role: localStorage.getItem('role') || null,
-    token: localStorage.getItem('token') || null,
-};
+// export const authContext = createContext(initialState);
 
-export const authContext = createContext(initialState);
+// const authReducer = (state, action) => {
+//     switch (action.type) {
+//         case 'LOGIN_START':
+//             return {
+//                 user: null,
+//                 role: null,
+//                 token: null
+//             };
 
-const authReducer = (state, action) => {
-    switch (action.type) {
-        case 'LOGIN_START':
-            return {
-                user: null,
-                role: null,
-                token: null
-            };
+//         case 'LOGIN_SUCCESS':
+//             localStorage.setItem('token', action.payload.token);
+//             localStorage.setItem('user', JSON.stringify(action.payload.user));
+//             localStorage.setItem('role', action.payload.role);
 
-        case 'LOGIN_SUCCESS':
-            return {
-                user: action.payload.user,
-                token: action.payload.token,
-                role: action.payload.role
-            };
+//             return {
+//                 ...state,
+//                 token: action.payload.token,
+//                 user: action.payload.user,
+//                 role: action.payload.role,
+//             };
 
-        case 'LOGOUT':
-            return {
-                user: null,
-                token: null,
-                role: null
-            };
+//         case 'LOGOUT':
+//             localStorage.removeItem('token');
+//             localStorage.removeItem('user');
+//             localStorage.removeItem('role');
+            
+//             return {
+//                 ...state,
+//                 user: null,
+//                 token: null,
+//                 role: null
+//             };
 
-        default:
-            return state;
-    }
-}
+//         default:
+//             return state;
+//     }
+// }
 
-export const AuthContextProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(authReducer, initialState);
-    const [isInitialized, setIsInitialized] = useState(false)
-    
-    useEffect(() => {
-        setIsInitialized(true)
-        localStorage.setItem('user', JSON.stringify(state.user));
-        localStorage.setItem('token', state.token || '');
-        localStorage.setItem('role', state.role || '');
-    }, [state]);
+// export const AuthContextProvider = ({ children }) => {
+//     const [state, dispatch] = useReducer(authReducer, initialState);
+//     const [isInitialized, setIsInitialized] = useState(false)
 
-    if(!isInitialized){
-        return <div>Loading....</div>
-    }
+//     useEffect(() => {
+//         setIsInitialized(true)
+//     }, []);
 
-    return (
-        <authContext.Provider value={{ ...state, dispatch }}>
-            {children}
-        </authContext.Provider>
-    );
-}
+//     useEffect(() => {
+//         if (state.token) {
+//             localStorage.setItem('user', JSON.stringify(state.user));
+//             localStorage.setItem('token', state.token || '');
+//             localStorage.setItem('role', state.role || '');
+//         }
+//     }, [state.token, state.role, state.user])
+
+//     if (!isInitialized) {
+//         return <div>Loading....</div>
+//     }
+
+//     return (
+//         <authContext.Provider value={{ ...state, dispatch }}>
+//             {children}
+//         </authContext.Provider>
+//     );
+// }

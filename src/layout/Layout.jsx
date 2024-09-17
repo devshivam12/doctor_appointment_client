@@ -5,29 +5,29 @@ import Footer from '../component/footer/Footer';
 import LoadingGif from '../component/helper/LoadingGif';
 
 const Layout = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
 
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setIsLoading(false);
+  //   }, 3000);
 
-    return () => clearTimeout(timer);
-  }, []);
+  //   return () => clearTimeout(timer);
+  // }, []);
 
   return (
-    isLoading ? <LoadingGif /> : (
-      <div>
-        <Header />
-        <main>
 
-          <Routers />
+    <div>
+      <Header />
+      <main>
 
-        </main>
-        <Footer />
-      </div>
-    )
+        <Routers />
+
+      </main>
+      <Footer />
+    </div>
+
   );
 };
 

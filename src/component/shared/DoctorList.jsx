@@ -2,8 +2,8 @@ import React from 'react';
 
 import DoctorCard from './DoctorCard';
 import { motion } from 'framer-motion';
-import useFetchData from '../../hooks/useFetchData';
-import { BASE_URL } from '../../config';
+// import useFetchData from '../../hooks/useFetchData';
+// import { BASE_URL } from '../../config';
 import ComponentLoading from '../helper/ComponentLoading';
 import Error from '../error/Error';
 
@@ -11,7 +11,7 @@ import Error from '../error/Error';
 
 const DoctorList = () => {
 
-    const { data: doctors, loading, error } = useFetchData(`${BASE_URL}/doctor`)
+    // const { data: doctors, loading, error } = useFetchData(`${BASE_URL}/doctor`)
 
     return (
         <>
@@ -27,7 +27,7 @@ const DoctorList = () => {
                     </div>
                 </div>
 
-                {loading && <ComponentLoading />}
+                {/* {loading && <ComponentLoading />}
                 {error && <Error />}
 
                 {!loading && !error && (
@@ -42,7 +42,7 @@ const DoctorList = () => {
                             </motion.div>
                         ))}
                     </div>
-                )}
+                )} */}
             </section>
         </>
     );

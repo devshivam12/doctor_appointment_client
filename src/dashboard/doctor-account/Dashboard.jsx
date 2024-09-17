@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import useFetchData from '../../hooks/useFetchData'
+// import useFetchData from '../../hooks/useFetchData'
 import { BASE_URL } from '../../config'
 import ComponentLoading from '../../component/helper/ComponentLoading'
 import Error from '../../component/error/Error'
@@ -13,7 +13,7 @@ import Appointment from './Appointment'
 
 const Dashboard = () => {
 
-  const { data, loading, error, fetchData } = useFetchData(`${BASE_URL}/doctor/profile/me`)
+  // const { data, loading, error, fetchData } = useFetchData(`${BASE_URL}/doctor/profile/me`)
   
   const [activeTab, setActiveTab] = useState('overview')
   const navigate = useNavigate()

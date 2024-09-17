@@ -1,12 +1,12 @@
 import React from 'react'
-import useFetchData from '../../hooks/useFetchData'
+// import useFetchData from '../../hooks/useFetchData'
 import { BASE_URL } from '../../config'
 import ComponentLoading from '../../component/helper/ComponentLoading'
 import Error from '../../component/error/Error'
 import DoctorCard from '../../component/shared/DoctorCard'
 
 const MyBookings = () => {
-  const { data: appointments, loading, error } = useFetchData(`${BASE_URL}/user/appointments/my-appointments`)
+  // const { data: appointments, loading, error } = useFetchData(`${BASE_URL}/user/appointments/my-appointments`)
   return (
     <div>
       {loading && !error && <ComponentLoading />}

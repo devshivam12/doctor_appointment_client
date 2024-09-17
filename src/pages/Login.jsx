@@ -2,9 +2,14 @@ import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../config';
-import { authContext } from '../context/AuthContext';
+
 import HashLoader from 'react-spinners/HashLoader';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useDispatch } from 'react-redux';
+// import { loginUser } from '../redux/thunk/authThunk';
+import axios from 'axios';
+import { userExists, userNotExists } from '../redux/reducers/auth';
+import { getOrSavedFromStorage } from '../libs/feature';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -15,7 +20,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState(true);
 
-  const { dispatch } = useContext(authContext);
+  const dispatch = useDispatch()
 
   const navigate = useNavigate();
 
@@ -28,43 +33,44 @@ const Login = () => {
   }
 
   const submitHandler = async (e) => {
-    setLoading(true);
     e.preventDefault();
+    setLoading(true); // Start loading
+    const toastId = toast.loading("Logging in....");
 
     try {
-      const res = await fetch(`${BASE_URL}/auth/login`, {
-        method: 'post',
+      const config = {
+        withCredentials: true,
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData)
-      });
+      };
 
-      const result = await res.json();
+      const response = await axios.post(`${BASE_URL}/auth/login`, formData, config);
+      console.log(response.data.user)
 
-      if (!res.ok) {
-        throw new Error(result.message);
-      }
 
-      dispatch({
-        type: 'LOGIN_SUCCESS',
-        payload: {
-          user: result.data,
-          token: result.token,
-          role: result.role,
+      // Use response.status to check if the login was successful
+      dispatch(userExists(response.data.user));
+      // console.log(response.data.user.role)
+      if (response.status === 200) {
+        if (response.data.user.role) {
+          getOrSavedFromStorage({
+            key: 'role',
+            value: response.data.user.role,
+            get: false,
+          });
         }
-      });
-      // console.log("Login token",token)
-      toast.success(result.message);
-      setLoading(false);
-
-      navigate('/');
-
+        toast.update(toastId, { render: response.data.message, type: "success", isLoading: false, autoClose: 3000 });
+        navigate('/'); // Redirect if successful
+      }
     } catch (error) {
-      toast.error(error.message);
-      setLoading(false);
+      toast.update(toastId, { render: error?.response?.data?.message || "Something went wrong", type: "error", isLoading: false, autoClose: 3000 });
+      dispatch(userNotExists(true));
+      console.log(error);
+    } finally {
+      setLoading(false); // Stop loading in both success and error scenarios
     }
-  }
+  };
 
 
   return (

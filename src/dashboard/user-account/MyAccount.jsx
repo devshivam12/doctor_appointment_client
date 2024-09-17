@@ -1,19 +1,19 @@
 import React, { useContext, useState } from 'react'
 import userImg from '../../assets/images/doctor-img01.png'
-import { authContext } from '../../context/AuthContext'
+// import { authContext } from '../../context/AuthContext'
 
 import MyBookings from './MyBookings'
 import MySettings from './MySettings'
 
-import useFetchData from '../../hooks/useFetchData'
-import { BASE_URL } from '../../config'
+// import useFetchData from '../../hooks/useFetchData'
+// import { BASE_URL } from '../../config'
 
 import ComponentLoading from '../../component/helper/ComponentLoading'
 import Error from '../../component/error/Error'
 
 const MyAccount = () => {
 
-  const { dispatch } = useContext(authContext)
+  // const { dispatch } = useContext(authContext)
   const [tab, setTab] = useState('bookings')
 
   const handleLogout = () => {
@@ -22,7 +22,7 @@ const MyAccount = () => {
     })
   }
 
-  const { data: userData, loading, error } = useFetchData(`${BASE_URL}/user/profile/me`)
+  // const { data: userData, loading, error } = useFetchData(`${BASE_URL}/user/profile/me`)
 
 
   return (
@@ -33,9 +33,9 @@ const MyAccount = () => {
           loading && !error && <ComponentLoading />
         }
 
-{
-  error && !loading && <Error errorMsg={error} />
-}
+        {
+          error && !loading && <Error errorMsg={error} />
+        }
 
         {
           !loading && !error && (

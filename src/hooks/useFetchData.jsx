@@ -1,42 +1,49 @@
-import { useEffect, useState } from 'react';
-import { token } from '../config';
+// import { useEffect, useState } from 'react';
+// import { token } from '../config';
 
-const useFetchData = (url) => {
-    const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+// const useFetchData = (url) => {
+//     const [data, setData] = useState([]);
+//     const [loading, setLoading] = useState(false);
+//     const [error, setError] = useState(null);
 
-    const fetchData = async () => {
-        setLoading(true);
+//     useEffect(() => {
+//         if (!token) {
+//             setLoading(false)
+//         }
+//     })
 
-        try {
-            const response = await fetch(url, {
-                headers: {
-                    'content-type': "application/json",
-                    Authorization: `Bearer ${token}`
-                }
-            });
+//     const fetchData = async () => {
+//         setLoading(true);
 
-            const result = await response.json();
-            if (!response.ok) {
-                throw new Error(result.message);
-            }
+//         try {
+//             const response = await fetch(url, {
+//                 headers: {
+//                     Accept: "application/json",
+//                     'content-type': "application/json",
+//                     Authorization: `Bearer ${token}`
+//                 }
+//             });
 
-            setData(result.data);
-            setLoading(false);
-        } catch (error) {
-            setLoading(false);
-            setError(error.message);
-        }
-    };
+//             const result = await response.json();
+//             if (!response.ok) {
+//                 throw new Error(result.message);
+//             }
+
+//             setData(result.data);
+//             setLoading(false);
+//         } catch (error) {
+//             setLoading(false);
+//             setError(error.message);
+//         }
+//     };
 
 
-    useEffect(() => {
+//     useEffect(() => {
 
-        fetchData();
-    }, [url]);
+//         fetchData();
+//     }, [url]);
 
-    return { data, error, loading, fetchData };
-};
+//     return { data, error, loading, fetchData };
+// };
 
-export default useFetchData;
+// export default useFetchData;
