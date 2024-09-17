@@ -21,7 +21,7 @@ const authSlice = createSlice({
             state.role = action.payload.role
         },
         userNotExists: (state) => {
-            state.user = null
+            state.user = "abc"
             state.loader = true
             state.role = ""
 

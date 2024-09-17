@@ -11,10 +11,18 @@ function App() {
   const { user, role, loader } = useSelector((state => state.auth))
   const dispatch = useDispatch()
   console.log(user)
+  
   useEffect(() => {
     axios.get(`${BASE_URL}/user/profile/me`, { withCredentials: true })
-      .then((res) => dispatch(userExists(res.data.user)))
-      .catch((error) => dispatch(userNotExists()))
+      .then((res) =>{
+        console.log(res)
+        dispatch(userExists(res.data.data))
+      })
+      .catch((error) =>{
+        if(error.response.status === 401){
+          dispatch(userNotExists())
+        }
+      })
   }, [dispatch])
 
   
