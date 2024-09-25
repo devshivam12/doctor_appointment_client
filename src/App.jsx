@@ -26,6 +26,7 @@ function App() {
     console.log(doctorData)
   }
 
+
   return (
     <>
       <Layout />

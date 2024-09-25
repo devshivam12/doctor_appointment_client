@@ -51,7 +51,6 @@ const Login = () => {
   };
 
 
-
   return (
     <section className='px-5 lg:px-0'>
       <div className='w-full max-w-[570px] mx-auto rounded-lg p-10 sm:p-10 md:p-10 shadow-md'>
