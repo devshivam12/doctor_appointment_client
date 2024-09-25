@@ -3,21 +3,29 @@ import './App.css'
 import Layout from "./layout/Layout";
 import { useEffect } from 'react';
 import { BASE_URL } from './config';
-import { userExists, userNotExists } from './redux/reducers/auth';
+// import { userExists, userNotExists } from './redux/reducers/auth';
 import axios from 'axios';
+import { getOrSavedFromStorage } from './libs/feature';
+import { FaDiaspora } from 'react-icons/fa';
+import { useGetDoctorQuery, useGetPatientQuery } from './redux/api/api';
 
 function App() {
 
-  const { user, role, loader } = useSelector((state => state.auth))
-  const dispatch = useDispatch()
-  console.log(user)
-  useEffect(() => {
-    axios.get(`${BASE_URL}/user/profile/me`, { withCredentials: true })
-      .then((res) => dispatch(userExists(res.data.user)))
-      .catch((error) => dispatch(userNotExists()))
-  }, [dispatch])
+  const role = useSelector((state) => state.auth.role)
+  console.log(role)
 
-  
+  const {data: patientData} = useGetPatientQuery()
+
+  const {data: doctorData} = useGetDoctorQuery()
+
+  if(role === 'patient'){
+    console.log(patientData)
+  }
+  else if(role === 'doctor'){
+    // const {data, isLoading} = useGetDoctorQuery()
+    console.log(doctorData)
+  }
+
   return (
     <>
       <Layout />

@@ -2,8 +2,9 @@ import React, { useState, useContext, useEffect } from 'react';
 import Logo from '../../assets/images/image.png';
 import { NavLink, Link } from 'react-router-dom';
 import { BiMenu, BiX } from 'react-icons/bi';
+// import { useSelector } from 'react-redux';
+import { CiBellOn } from "react-icons/ci";
 import { useSelector } from 'react-redux';
-// import { authContext } from '../../context/AuthContext';
 
 const navLinks = [
   {
@@ -16,7 +17,7 @@ const navLinks = [
   },
   {
     path: '/services',
-    display: 'Services',
+    display: 'Messages',
   },
   {
     path: '/contact',
@@ -26,26 +27,24 @@ const navLinks = [
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-
-  // const { role } = useSelector((state) => state.auth)
-
-
-  // const { user, role, token } = useContext(authContext)
-  // console.log(user)
-  // console.log('token', token)
+  const [dropDown, setDropDown] = useState(false)
+  // const { user, role } = useSelector((state) => state.auth)
 
   // useEffect(() => {
-  //   if(token || user) {
-  //     setIsAuthenticated(true)
-  //   }
-  //   else{
-  //     setIsAuthenticated(false)
-  //   }
-  // }, [token, user])
+  //   console.log(user)
+  // }, [user])
+
+
+  const role = useSelector((state) => state.auth.role)
+  console.log(role)
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
+
+  const toggleDropDown = () => {
+    setDropDown(!dropDown)
+  }
 
   return (
     <header className='header flex items-center sticky top-0 left-0 z-[99999] shadow-sm bg-white md:px-[2.7rem] lg:px-[5rem] px-[1rem]'>
@@ -57,7 +56,7 @@ const Header = () => {
 
         {/* menu */}
         <div className='navigation md:flex hidden'>
-          <ul className='menu flex items-center sm:gap-[1rem] md:gap-[0.4rem] lg:gap-[2.7rem]'>
+          <ul className='menu flex items-center sm:gap-[1rem] md:gap-[1rem] lg:gap-[3rem]'>
             {navLinks.map((link, index) => (
               <li key={index}>
                 <NavLink
@@ -75,9 +74,9 @@ const Header = () => {
         <div className="flex items-center gap-4">
           <div>
             {/* <Link to={`${role === 'doctor' ? '/doctor/profile/me' : '/user/profile/me'}`}> */}
-              <figure className='w-[35px] h-[35px] rounded-full cursor-pointer'>
-                {/* <img src={user?.photo} alt="User" className='w-[3rem]' /> */}
-              </figure>
+            <figure className='w-[35px] h-[35px] rounded-full cursor-pointer'>
+              {/* <img src={user?.photo} alt="User" className='w-[3rem]' /> */}
+            </figure>
 
             {/* </Link> */}
           </div>
@@ -90,6 +89,42 @@ const Header = () => {
           <span className=' md:hidden' onClick={toggleMenu}>
             <BiMenu className='w-6 h-6 cursor-pointer' />
           </span>
+        </div>
+        <div>
+          <CiBellOn size={30} className='cursor-pointer' />
+        </div>
+
+        <div className='relative cursor-pointer' onClick={toggleDropDown}>
+          {/* <div>
+            {user?.data?.photo ? (
+              <img src={user.data.photo} alt="User" className="w-[40px] h-[40px] rounded-full" />
+            ) : (
+              <span>Loading...</span>
+            )}
+          </div> */}
+
+          {
+            dropDown && (
+              <div className='absolute w-48 py-2 px-[1rem] bg-white right-0 border rounded-sm shadow-lg z-50 mt-2'>
+                <Link to='/profile'>
+                  Your profile
+                </Link>
+                <Link to='/account-settings'>
+                  Account settings
+                </Link>
+                <Link to='/your-bookings'>
+                  Your bookings
+                </Link>
+                <Link to='/transaction-history'>
+                  Transaction history
+                </Link>
+                <p>
+                  Log out
+                </p>
+              </div>
+            )
+          }
+
         </div>
       </div>
 

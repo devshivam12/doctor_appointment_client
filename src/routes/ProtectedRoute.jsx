@@ -1,19 +1,16 @@
 import React, { useContext } from 'react'
-// import { authContext } from '../context/AuthContext'
-import { Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Navigate, Outlet } from 'react-router-dom';
 import HashLoader from 'react-spinners/HashLoader';
 
-const ProtectedRoute = ({ children, allowedRoles }) => {
-    // const { token, role } = useContext(authContext)
+const ProtectedRoute = ({ children, user, redirect = '/login', allowedRoles }) => {
 
-    if(!token){
-        return <Navigate to='/login' replace={true} />;
-    }
+    const { role } = useSelector((state => state.auth))
 
-    const isAllowed = allowedRoles.includes(role);
-    const accessibleRoute = token && isAllowed ? children : <Navigate to='/login' replace={true} />
+    if (!role) return <Navigate to={redirect} />
+    const isAllowed = allowedRoles.includes(role)
+    return isAllowed ? children : <Navigate to={redirect} />
     
-    return accessibleRoute
 }
 
 export default ProtectedRoute
