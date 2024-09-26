@@ -70,7 +70,7 @@ const authSlice = createSlice({
                     state.role = role
                     state.isAuthenticate = true
 
-                    getOrSavedFromStorage({ key: 'role', value: role, get: true })
+                    getOrSavedFromStorage({ key: 'role', value: role, get: false })
                 }
                 else {
                     state.isLoading = false

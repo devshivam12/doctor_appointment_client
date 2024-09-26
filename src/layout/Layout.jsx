@@ -4,7 +4,7 @@ import Routers from '../routes/Routers';
 import Footer from '../component/footer/Footer';
 import LoadingGif from '../component/helper/LoadingGif';
 
-const Layout = () => {
+const Layout = ({ patientData, doctorData }) => {
   // const [isLoading, setIsLoading] = useState(true);
 
 
@@ -19,7 +19,7 @@ const Layout = () => {
   return (
 
     <div>
-      <Header />
+      <Header patientData={patientData} doctorData={doctorData} />
       <main>
 
         <Routers />

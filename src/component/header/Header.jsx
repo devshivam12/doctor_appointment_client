@@ -25,16 +25,11 @@ const navLinks = [
   },
 ];
 
-const Header = () => {
+const Header = ({ patientData, doctorData }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropDown, setDropDown] = useState(false)
-  // const { user, role } = useSelector((state) => state.auth)
-
-  // useEffect(() => {
-  //   console.log(user)
-  // }, [user])
-
-
+  
+console.log(patientData)
   const role = useSelector((state) => state.auth.role)
   console.log(role)
 
@@ -95,13 +90,15 @@ const Header = () => {
         </div>
 
         <div className='relative cursor-pointer' onClick={toggleDropDown}>
-          {/* <div>
-            {user?.data?.photo ? (
-              <img src={user.data.photo} alt="User" className="w-[40px] h-[40px] rounded-full" />
+          <div>
+            {role === 'patient' && patientData?.data.role === role ? (
+              <img src={patientData?.data?.photo} alt="User" className="w-[40px] h-[40px] rounded-full" />
+            ) : role === 'doctor' && doctorData?.data.role === role ? (
+              <img src={patientData?.data?.photo} alt="User" className="w-[40px] h-[40px] rounded-full" />
             ) : (
               <span>Loading...</span>
             )}
-          </div> */}
+          </div>
 
           {
             dropDown && (

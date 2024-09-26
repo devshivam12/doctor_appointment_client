@@ -42,7 +42,12 @@ const Login = () => {
         getOrSavedFromStorage({ key: "role", value: userRole, get: false })
 
         toast.success(data?.payload?.message)
-        navigate('/')
+        if(userRole === 'patient'){
+          navigate('/user/profile/me')
+        }
+        else if(userRole === 'doctor'){
+          navigate('/doctor/profile/me')
+        }
       }
       else {
         toast.error(data?.payload?.message)
