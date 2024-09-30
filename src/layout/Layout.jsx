@@ -1,28 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import Header from '../component/header/Header';
 import Routers from '../routes/Routers';
 import Footer from '../component/footer/Footer';
-import LoadingGif from '../component/helper/LoadingGif';
 
-const Layout = ({ patientData, doctorData }) => {
-  // const [isLoading, setIsLoading] = useState(true);
-
-
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setIsLoading(false);
-  //   }, 3000);
-
-  //   return () => clearTimeout(timer);
-  // }, []);
-
+const Layout = ({ patientData, doctorData, isAuthenticate, user }) => {
+  console.log(user)
   return (
 
     <div>
       <Header patientData={patientData} doctorData={doctorData} />
       <main>
 
-        <Routers />
+        <Routers isAuthenticate={isAuthenticate} user={user} />
 
       </main>
       <Footer />
@@ -31,4 +20,4 @@ const Layout = ({ patientData, doctorData }) => {
   );
 };
 
-export default Layout;
+export default memo(Layout);

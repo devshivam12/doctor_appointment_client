@@ -38,6 +38,16 @@ export const logout = createAsyncThunk('/auth/logout',
     }
 )
 
+export const checkAuth = createAsyncThunk('/auth/checkauth', async () => {
+    const response = await axios.get(`${BASE_URL}/auth/checkauth`, {
+        withCredentials: true,
+        headers: {
+            "Cache-Control": "no-store, no-cache, must-revalidate, must-revalidate",
+        },
+    });
+    return response.data;
+});
+
 const authSlice = createSlice({
     name: "auth",
     initialState,
@@ -92,6 +102,19 @@ const authSlice = createSlice({
                 state.isLoading = false
 
                 getOrSavedFromStorage({ key: 'role', value: null, get: false })
+            })
+            .addCase(checkAuth.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(checkAuth.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.user = action.payload.success ? action.payload.user : null;
+                state.isAuthenticate = action.payload.success
+            })
+            .addCase(checkAuth.rejected, (state, action) => {
+                state.isLoading = false;
+                state.user = null
+                state.isAuthenticate = false
             })
     }
 })

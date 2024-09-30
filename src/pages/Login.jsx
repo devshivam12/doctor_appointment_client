@@ -35,24 +35,26 @@ const Login = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     setLoading(true)
-    dispatch(login(formData)).then((data) => {
-      if (data?.payload?.success) {
-        const userRole = data.payload.user.role
 
-        getOrSavedFromStorage({ key: "role", value: userRole, get: false })
+    const data = await dispatch(login(formData))
 
-        toast.success(data?.payload?.message)
-        if(userRole === 'patient'){
-          navigate('/user/profile/me')
-        }
-        else if(userRole === 'doctor'){
-          navigate('/doctor/profile/me')
-        }
+    if (data?.payload?.success) {
+      const userRole = data.payload.user.role
+
+      getOrSavedFromStorage({ key: "role", value: userRole, get: false })
+
+      toast.success(data?.payload?.message)
+      if (userRole === 'patient') {
+        navigate('/user/profile/me')
       }
-      else {
-        toast.error(data?.payload?.message)
+      else if (userRole === 'doctor') {
+        navigate('/doctor/profile/me')
       }
-    })
+    }
+    else {
+      toast.error(data?.payload?.message)
+    }
+
   };
 
 

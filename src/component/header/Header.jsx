@@ -28,8 +28,8 @@ const navLinks = [
 const Header = ({ patientData, doctorData }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropDown, setDropDown] = useState(false)
-  
-console.log(patientData)
+
+  console.log(doctorData)
   const role = useSelector((state) => state.auth.role)
   console.log(role)
 
@@ -91,10 +91,10 @@ console.log(patientData)
 
         <div className='relative cursor-pointer' onClick={toggleDropDown}>
           <div>
-            {role === 'patient' && patientData?.data.role === role ? (
+            {role === 'patient' && patientData?.data?.role === role ? (
               <img src={patientData?.data?.photo} alt="User" className="w-[40px] h-[40px] rounded-full" />
-            ) : role === 'doctor' && doctorData?.data.role === role ? (
-              <img src={patientData?.data?.photo} alt="User" className="w-[40px] h-[40px] rounded-full" />
+            ) : role === 'doctor' && doctorData?.data?.role === role ? (
+              <img src={doctorData?.data?.photo} alt="User" className="w-[40px] h-[40px] rounded-full" />
             ) : (
               <span>Loading...</span>
             )}
@@ -135,11 +135,11 @@ console.log(patientData)
             <li key={index}>
               <NavLink
                 to={link.path}
-                className={navClass => navClass.isActive ? 'text-primaryColor leading-7 font-[600] text-[16px]' : 'text-textColor leading-7 font-[500] text-[16px] hover:text-primaryColor'}
-                onClick={toggleMenu}
+                className={({ isActive }) => isActive ? 'text-primaryColor' : 'text-textColor'}
               >
                 {link.display}
               </NavLink>
+
             </li>
           ))}
         </ul>

@@ -3,14 +3,19 @@ import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
 import HashLoader from 'react-spinners/HashLoader';
 
-const ProtectedRoute = ({ children, user, redirect = '/login', allowedRoles }) => {
+const ProtectedRoute = ({ allowedRoles, children }) => {
 
-    const { role } = useSelector((state => state.auth))
+    const { isAuthenticate, role } = useSelector((state) => state.auth)
+    console.log(isAuthenticate)
+    if (!isAuthenticate) {
+        return <Navigate to='/login' replace />
+    }
 
-    if (!role) return <Navigate to={redirect} />
-    const isAllowed = allowedRoles.includes(role)
-    return isAllowed ? children : <Navigate to={redirect} />
-    
+    if (!allowedRoles.includes(role)) {
+        return <Navigate to='/unauthorized' replace />
+    }
+    return children
+
 }
 
 export default ProtectedRoute
