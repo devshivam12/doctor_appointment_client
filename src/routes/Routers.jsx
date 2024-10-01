@@ -24,41 +24,31 @@ const Routers = ({ isAuthenticate, user }) => {
   return (
     <>
 
-      <Suspense fallback={<div><LoadingGif /></div>}>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <CheckAuth isAuthenticate={isAuthenticate} user={user}>
-                <Home />
-              </CheckAuth>
-            }
-          />
-          <Route
-            path="/user/profile/me"
-            element={
-              <CheckAuth isAuthenticate={isAuthenticate} user={user}>
-                <MyAccount />
-              </CheckAuth>
-            }
-          />
-          <Route
-            path="/doctor/profile/me"
-            element={
-              <CheckAuth isAuthenticate={isAuthenticate} user={user}>
-                <Dashboard />
-              </CheckAuth>
-            }
-          />
-          <Route path="/doctors" element={<Doctors />} />
-          <Route path="/doctors/:id" element={<DoctorDetails />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Signup />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/services" element={<Service />} />
-        </Routes>
-      </Suspense>
 
+<Suspense>
+      <Routes>
+        <Route path="/login" element={
+          <ProtectedRoute isAuthenticate={isAuthenticate} user={user}>
+            <Login />
+          </ProtectedRoute>
+        } />
+        <Route path="/register" element={<Signup />} />
+
+        {/* Protected Routes */}
+        <Route path="/user/profile/me" element={
+          <ProtectedRoute isAuthenticate={isAuthenticate} user={user}>
+            <MyAccount />
+          </ProtectedRoute>
+        } />
+        <Route path="/doctor/profile/me" element={
+          <ProtectedRoute isAuthenticate={isAuthenticate} user={user}>
+            <Dashboard />
+          </ProtectedRoute>
+        } />
+
+        {/* Add other routes as needed */}
+      </Routes>
+    </Suspense>
     </>
   );
 };
