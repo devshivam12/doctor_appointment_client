@@ -1,21 +1,23 @@
-import React, { useContext } from 'react'
-import { useSelector } from 'react-redux';
-import { Navigate, Outlet } from 'react-router-dom';
-import HashLoader from 'react-spinners/HashLoader';
+import React from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
 
-const ProtectedRoute = ({ allowedRoles, children }) => {
+const CheckAuth = ({ isAuthenticate, user, children }) => {
+    const location = useLocation();
 
-    const { isAuthenticate, role } = useSelector((state) => state.auth)
-    console.log(isAuthenticate)
-    if (!isAuthenticate) {
-        return <Navigate to='/login' replace />
+    // Redirect if user is authenticated and tries to access login or register page
+    if (isAuthenticate && (location.pathname === '/login' || location.pathname === '/register')) {
+        return user?.role === 'patient' ? <Navigate to='/user/profile/me' /> : <Navigate to='/doctor/profile/me' />;
     }
 
-    if (!allowedRoles.includes(role)) {
-        return <Navigate to='/unauthorized' replace />
+    // Redirect if user is not authenticated and trying to access protected routes
+    if (!isAuthenticate && !location.pathname.includes('/login') && !location.pathname.includes('/register')) {
+        return <Navigate to='/login' />;
     }
-    return children
 
+    // Additional role-based protection can go here
+
+    return <>{children}</>; // Render child components if all checks pass
 }
 
-export default ProtectedRoute
+export default CheckAuth;
+
