@@ -8,7 +8,7 @@ const Layout = ({ patientData, doctorData, isAuthenticate, user }) => {
   return (
 
     <div>
-      <Header patientData={patientData} doctorData={doctorData} />
+      <Header isAuthenticate={isAuthenticate} patientData={patientData} doctorData={doctorData} />
       <main>
 
         <Routers isAuthenticate={isAuthenticate} user={user} />

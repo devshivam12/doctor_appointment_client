@@ -1,10 +1,20 @@
 import React, { useState, useContext, useEffect } from 'react';
 import Logo from '../../assets/images/image.png';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { BiMenu, BiX } from 'react-icons/bi';
 // import { useSelector } from 'react-redux';
 import { CiBellOn } from "react-icons/ci";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
+
+import { CgProfile } from "react-icons/cg";
+import { CiSettings } from "react-icons/ci";
+import { BiClinic } from "react-icons/bi";
+import { GrTransaction } from "react-icons/gr";
+import { CiLogout } from "react-icons/ci";
+import { TfiHelpAlt } from "react-icons/tfi";
+import { logoutUser } from '../../redux/reducers/auth';
+
 
 const navLinks = [
   {
@@ -25,11 +35,13 @@ const navLinks = [
   },
 ];
 
-const Header = ({ patientData, doctorData }) => {
+const Header = ({ patientData, doctorData, isAuthenticate }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropDown, setDropDown] = useState(false)
-
-  console.log(doctorData)
+  // console.log(patientData)
+  // console.log(doctorData)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const role = useSelector((state) => state.auth.role)
   console.log(role)
 
@@ -41,8 +53,14 @@ const Header = ({ patientData, doctorData }) => {
     setDropDown(!dropDown)
   }
 
+  const handleLogout = async () => {
+    const result = await dispatch(logoutUser())
+    if (result.success.message) {
+      navigate('/')
+    }
+  }
   return (
-    <header className='header flex items-center sticky top-0 left-0 z-[99999] shadow-sm bg-white md:px-[2.7rem] lg:px-[5rem] px-[1rem]'>
+    <header className='header flex items-center sticky top-0 left-0 z-[99999] shadow-sm bg-white md:px-[2.7rem] lg:px-[3rem] px-[1rem]'>
       <div className="container flex items-center justify-between ">
         {/* logo */}
         <div className='sm:mr-[2px]'>
@@ -66,62 +84,77 @@ const Header = ({ patientData, doctorData }) => {
         </div>
 
         {/* nav right */}
-        <div className="flex items-center gap-4">
-          <div>
-            {/* <Link to={`${role === 'doctor' ? '/doctor/profile/me' : '/user/profile/me'}`}> */}
-            <figure className='w-[35px] h-[35px] rounded-full cursor-pointer'>
-              {/* <img src={user?.photo} alt="User" className='w-[3rem]' /> */}
-            </figure>
+        <div className="flex items-center">
 
-            {/* </Link> */}
-          </div>
-          <Link to='/login'>
-            <button className='bg-primaryColor py-2 px-10 text-white font-[600] h-[44px] flex items-center justify-center rounded-[10px]'>
-              Login
-            </button>
-          </Link>
+          {
+            !isAuthenticate && (
+              <Link to='/login'>
+                <button className='bg-primaryColor py-2 px-10 text-white font-[600] h-[44px] flex items-center justify-center rounded-[10px]'>
+                  Login
+                </button>
+              </Link>
 
+            )
+          }
           <span className=' md:hidden' onClick={toggleMenu}>
             <BiMenu className='w-6 h-6 cursor-pointer' />
           </span>
         </div>
-        <div>
-          <CiBellOn size={30} className='cursor-pointer' />
-        </div>
 
-        <div className='relative cursor-pointer' onClick={toggleDropDown}>
+        <div className='flex items-center justify-center gap-5'>
+
           <div>
-            {role === 'patient' && patientData?.data?.role === role ? (
-              <img src={patientData?.data?.photo} alt="User" className="w-[40px] h-[40px] rounded-full" />
-            ) : role === 'doctor' && doctorData?.data?.role === role ? (
-              <img src={doctorData?.data?.photo} alt="User" className="w-[40px] h-[40px] rounded-full" />
-            ) : (
-              <span>Loading...</span>
-            )}
+            <TfiHelpAlt size={25} className='cursor-pointer' />
           </div>
 
-          {
-            dropDown && (
-              <div className='absolute w-48 py-2 px-[1rem] bg-white right-0 border rounded-sm shadow-lg z-50 mt-2'>
-                <Link to='/profile'>
-                  Your profile
-                </Link>
-                <Link to='/account-settings'>
-                  Account settings
-                </Link>
-                <Link to='/your-bookings'>
-                  Your bookings
-                </Link>
-                <Link to='/transaction-history'>
-                  Transaction history
-                </Link>
-                <p>
-                  Log out
-                </p>
-              </div>
-            )
-          }
+          <div>
+            <CiBellOn size={30} className='cursor-pointer' />
+          </div>
 
+          <div className='relative cursor-pointer' onClick={toggleDropDown}>
+            <div>
+              {isAuthenticate && role === 'patient' && patientData?.data?.role === role ? (
+                <img src={patientData?.data?.photo} alt="User" className="w-[35px] h-[35px] rounded-full" />
+              ) : isAuthenticate && role === 'doctor' && doctorData?.data?.role === role ? (
+                <img src={doctorData?.data?.photo} alt="User" className="w-[35px] h-[35px] rounded-full" />
+              ) : (
+                <span>Loading...</span>
+              )}
+            </div>
+
+            {
+              dropDown && (
+                <div className='absolute w-[15rem] bg-white right-0 border rounded-sm shadow-lg z-50 mt-1'>
+                  <Link to='/profile' className='flex items-center justify-start px-[1rem] py-[1rem] text-gray-700 hover:bg-gray-100 leading-tight'>
+                    <img src={patientData?.data?.photo} className='w-[40px] h-[40px] rounded-full' /> <span className='ml-[1rem]'>
+                      <p>{patientData.data.name}</p>
+                    </span>
+                  </Link>
+                  <div className='h-[0.7px] w-full m-auto border border-slate-100'></div>
+                  <Link to='/profile' className='flex items-center justify-start px-[1rem] py-[1rem] text-gray-700 hover:bg-gray-100 leading-tight'>
+                    <CgProfile size={20} /> <span className='ml-[1rem]'>Your profile</span>
+                  </Link>
+                  <Link to='/account-settings' className='flex items-center justify-start px-[1rem] py-[1rem] text-gray-700 hover:bg-gray-100 leading-tight'>
+                    <CiSettings size={20} /> <span className='ml-[1rem]'>Account settings</span>
+                  </Link>
+                  <Link to='/your-bookings' className='flex items-center justify-start px-[1rem] py-[1rem] text-gray-700 hover:bg-gray-100 leading-tight'>
+                    <BiClinic size={20} /> <span className='ml-[1rem]'>Your bookings</span>
+                  </Link>
+                  <Link to='/transaction-history' className='flex items-center justify-start px-[1rem] py-[1rem] text-gray-700 hover:bg-gray-100 leading-tight'>
+                    <GrTransaction size={20} /> <span className='ml-[1rem]'>Transaction history</span>
+                  </Link>
+                  <div className='h-[0.7px] w-full m-auto border border-slate-100'></div>
+                  <p
+                    onClick={handleLogout}
+                    className='flex items-center justify-start px-[1rem] py-[1rem] text-gray-900 hover:bg-gray-100 cursor-pointer leading-tight'
+                  >
+                    <CiLogout size={20} /> <span className='ml-[1rem]'>Log out</span>
+                  </p>
+                </div>
+              )
+            }
+
+          </div>
         </div>
       </div>
 

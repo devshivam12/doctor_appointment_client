@@ -25,30 +25,32 @@ const Routers = ({ isAuthenticate, user }) => {
     <>
 
 
-<Suspense>
-      <Routes>
-        <Route path="/login" element={
-          <ProtectedRoute isAuthenticate={isAuthenticate} user={user}>
-            <Login />
-          </ProtectedRoute>
-        } />
-        <Route path="/register" element={<Signup />} />
+      <Suspense>
+        <Routes>
+          <Route path="/" element={<CheckAuth isAuthenticate={isAuthenticate} user={user}><Home /></CheckAuth>} />
 
-        {/* Protected Routes */}
-        <Route path="/user/profile/me" element={
-          <ProtectedRoute isAuthenticate={isAuthenticate} user={user}>
-            <MyAccount />
-          </ProtectedRoute>
-        } />
-        <Route path="/doctor/profile/me" element={
-          <ProtectedRoute isAuthenticate={isAuthenticate} user={user}>
-            <Dashboard />
-          </ProtectedRoute>
-        } />
+          <Route path="/login" element={
+            <ProtectedRoute isAuthenticate={isAuthenticate} user={user}>
+              <Login />
+            </ProtectedRoute>
+          } />
+          <Route path="/register" element={<Signup />} />
 
-        {/* Add other routes as needed */}
-      </Routes>
-    </Suspense>
+          {/* Protected Routes */}
+          <Route path="/user/profile/me" element={
+            <ProtectedRoute isAuthenticate={isAuthenticate} user={user}>
+              <MyAccount />
+            </ProtectedRoute>
+          } />
+          <Route path="/doctor/profile/me" element={
+            <ProtectedRoute isAuthenticate={isAuthenticate} user={user}>
+              <Dashboard />
+            </ProtectedRoute>
+          } />
+
+          {/* Add other routes as needed */}
+        </Routes>
+      </Suspense>
     </>
   );
 };

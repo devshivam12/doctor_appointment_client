@@ -3,7 +3,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 
 const CheckAuth = ({ isAuthenticate, user, children }) => {
     const location = useLocation();
-
+    
     // Redirect if user is authenticated and tries to access login or register page
     if (isAuthenticate && (location.pathname === '/login' || location.pathname === '/register')) {
         return user?.role === 'patient' ? <Navigate to='/user/profile/me' /> : <Navigate to='/doctor/profile/me' />;
