@@ -36,6 +36,7 @@ const navLinks = [
 ];
 
 const Header = ({ patientData, doctorData, isAuthenticate }) => {
+  console.log(patientData)
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropDown, setDropDown] = useState(false)
   // console.log(patientData)
@@ -60,7 +61,7 @@ const Header = ({ patientData, doctorData, isAuthenticate }) => {
     }
   }
   return (
-    <header className='header flex items-center sticky top-0 left-0 z-[99999] shadow-sm bg-white md:px-[2.7rem] lg:px-[3rem] px-[1rem]'>
+    <header className='header flex items-center sticky top-0 left-0 shadow-sm bg-white md:px-[2.7rem] lg:px-[3rem] px-[1rem]'>
       <div className="container flex items-center justify-between ">
         {/* logo */}
         <div className='sm:mr-[2px]'>
@@ -125,13 +126,13 @@ const Header = ({ patientData, doctorData, isAuthenticate }) => {
             {
               dropDown && (
                 <div className='absolute w-[15rem] bg-white right-0 border rounded-sm shadow-lg z-50 mt-1'>
-                  <Link to='/profile' className='flex items-center justify-start px-[1rem] py-[1rem] text-gray-700 hover:bg-gray-100 leading-tight'>
+                  <Link to={`/profile/${patientData?.data?._id}`} className='flex items-center justify-start px-[1rem] py-[1rem] text-gray-700 hover:bg-gray-100 leading-tight'>
                     <img src={patientData?.data?.photo} className='w-[40px] h-[40px] rounded-full' /> <span className='ml-[1rem]'>
                       <p>{patientData.data.name}</p>
                     </span>
                   </Link>
                   <div className='h-[0.7px] w-full m-auto border border-slate-100'></div>
-                  <Link to='/profile' className='flex items-center justify-start px-[1rem] py-[1rem] text-gray-700 hover:bg-gray-100 leading-tight'>
+                  <Link to={`/profile/${patientData?.data?._id}`} className='flex items-center justify-start px-[1rem] py-[1rem] text-gray-700 hover:bg-gray-100 leading-tight'>
                     <CgProfile size={20} /> <span className='ml-[1rem]'>Your profile</span>
                   </Link>
                   <Link to='/account-settings' className='flex items-center justify-start px-[1rem] py-[1rem] text-gray-700 hover:bg-gray-100 leading-tight'>

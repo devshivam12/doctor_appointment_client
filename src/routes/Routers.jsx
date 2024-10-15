@@ -10,12 +10,13 @@ const Doctors = lazy(() => import('../pages/doctor/Doctors'));
 const DoctorDetails = lazy(() => import('../pages/doctor/DoctorDetails'));
 
 import LoadingGif from '../component/helper/LoadingGif';
-import MyAccount from '../dashboard/user-account/MyAccount';
 import Dashboard from '../dashboard/doctor-account/Dashboard';
 import ProtectedRoute from './ProtectedRoute';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkAuth } from '../redux/reducers/auth';
 import CheckAuth from '../component/common/checkAuth';
+import Userprofile from '../dashboard/user-account/Userprofile';
+import DoctorListPage from '../dashboard/user-account/DoctorListPage';
 // import { useSelector } from 'react-redux';
 
 const Routers = ({ isAuthenticate, user }) => {
@@ -23,8 +24,6 @@ const Routers = ({ isAuthenticate, user }) => {
 
   return (
     <>
-
-
       <Suspense>
         <Routes>
           <Route path="/" element={<CheckAuth isAuthenticate={isAuthenticate} user={user}><Home /></CheckAuth>} />
@@ -37,11 +36,18 @@ const Routers = ({ isAuthenticate, user }) => {
           <Route path="/register" element={<Signup />} />
 
           {/* Protected Routes */}
-          <Route path="/user/profile/me" element={
+          <Route path="/user/find/doctor" element={
             <ProtectedRoute isAuthenticate={isAuthenticate} user={user}>
-              <MyAccount />
+              <DoctorListPage />
             </ProtectedRoute>
           } />
+
+          <Route path="/profile/:id" element={
+            <ProtectedRoute isAuthenticate={isAuthenticate} user={user}>
+              <Userprofile />
+            </ProtectedRoute>
+          } />
+
           <Route path="/doctor/profile/me" element={
             <ProtectedRoute isAuthenticate={isAuthenticate} user={user}>
               <Dashboard />

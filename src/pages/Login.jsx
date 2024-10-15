@@ -45,7 +45,7 @@ const Login = () => {
 
       toast.success(data?.payload?.message)
       if (userRole === 'patient') {
-        navigate('/user/profile/me')
+        navigate('/user/find/doctor')
       }
       else if (userRole === 'doctor') {
         navigate('/doctor/profile/me')

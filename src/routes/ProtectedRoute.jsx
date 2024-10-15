@@ -6,7 +6,7 @@ const CheckAuth = ({ isAuthenticate, user, children }) => {
     
     // Redirect if user is authenticated and tries to access login or register page
     if (isAuthenticate && (location.pathname === '/login' || location.pathname === '/register')) {
-        return user?.role === 'patient' ? <Navigate to='/user/profile/me' /> : <Navigate to='/doctor/profile/me' />;
+        return user?.role === 'patient' ? <Navigate to='/user/find/doctor' /> : <Navigate to='/doctor/profile/me' />;
     }
 
     // Redirect if user is not authenticated and trying to access protected routes

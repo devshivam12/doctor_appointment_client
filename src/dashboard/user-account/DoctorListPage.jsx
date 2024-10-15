@@ -10,11 +10,17 @@ import MySettings from './MySettings'
 
 import ComponentLoading from '../../component/helper/ComponentLoading'
 import Error from '../../component/error/Error'
+import { useGetAllDoctorQuery, useGetDoctorQuery } from '../../redux/api/api'
+import SearchBar from './SearchBar'
 
-const MyAccount = () => {
+const DoctorListPage = () => {
 
   // const { dispatch } = useContext(authContext)
   const [tab, setTab] = useState('bookings')
+
+  const { data } = useGetAllDoctorQuery()
+  console.log(data)
+
 
   const handleLogout = () => {
     dispatch({
@@ -100,8 +106,12 @@ const MyAccount = () => {
     //     }
     //   </div>
     // </section>
-    <div></div>
+    <section>
+      <div className='w-full max-w-[1170px] px-5 mx-auto'>
+        <SearchBar />
+      </div>
+    </section>
   )
 }
 
-export default MyAccount
+export default DoctorListPage

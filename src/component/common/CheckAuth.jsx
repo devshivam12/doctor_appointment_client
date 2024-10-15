@@ -12,7 +12,7 @@ const CheckAuth = ({ isAuthenticate, user, children }) => {
         }
         else {
             if (user?.role === 'patient') {
-                return <Navigate to='/user/profile/me' />
+                return <Navigate to='/user/find/doctor' />
             }
             else if (user?.role === 'doctor') {
                 return <Navigate to='/doctor/profile/me' />
@@ -35,7 +35,7 @@ const CheckAuth = ({ isAuthenticate, user, children }) => {
         )
     ) {
         if (user?.role === 'patient') {
-            return <Navigate to='/user/profile/me' />
+            return <Navigate to='/user/find/doctor' />
         }
         else if (user?.role === 'doctor') {
             return <Navigate to='/doctor/profile/me' />
