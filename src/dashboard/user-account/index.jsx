@@ -11,25 +11,17 @@ import MySettings from './MySettings'
 import ComponentLoading from '../../component/helper/ComponentLoading'
 import Error from '../../component/error/Error'
 import { useGetAllDoctorQuery, useGetDoctorQuery } from '../../redux/api/api'
-import SearchBar from './SearchBar'
+import SearchBar from './common/SearchBar'
+import Sidebar from './common/Sidebar'
+import DoctorListing from './DoctorListing'
 
 const DoctorListPage = () => {
 
   // const { dispatch } = useContext(authContext)
   const [tab, setTab] = useState('bookings')
 
-  const { data } = useGetAllDoctorQuery()
-  console.log(data)
-
-
-  const handleLogout = () => {
-    dispatch({
-      type: "LOGOUT"
-    })
-  }
-
-  // const { data: userData, loading, error } = useFetchData(`${BASE_URL}/user/profile/me`)
-
+  const { data: doctorData, isLoading, isError } = useGetAllDoctorQuery()
+  console.log("doctorData", doctorData)
 
   return (
     // <section>
@@ -106,11 +98,23 @@ const DoctorListPage = () => {
     //     }
     //   </div>
     // </section>
-    <section>
-      <div className='w-full max-w-[1170px] px-5 mx-auto'>
+    <div className='w-full max-w-[1270px] px-2 mx-auto mt-[3rem]'>
+      <div className='w-full'>
         <SearchBar />
       </div>
-    </section>
+
+      <div className='w-full mt-[3rem]'>
+        <div className="grid grid-cols-12 gap-4 w-full">
+          <div className="col-span-3 h-full">
+            <Sidebar />
+          </div>
+          <div className="col-span-9">
+            <DoctorListing doctorData={doctorData} isLoading={isLoading} isError={isError} />
+          </div>
+        </div>
+      </div>
+
+    </div>
   )
 }
 

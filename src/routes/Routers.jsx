@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { checkAuth } from '../redux/reducers/auth';
 import CheckAuth from '../component/common/checkAuth';
 import Userprofile from '../dashboard/user-account/Userprofile';
-import DoctorListPage from '../dashboard/user-account/DoctorListPage';
+import UserIndex from '../dashboard/user-account/index';
 // import { useSelector } from 'react-redux';
 
 const Routers = ({ isAuthenticate, user }) => {
@@ -38,7 +38,7 @@ const Routers = ({ isAuthenticate, user }) => {
           {/* Protected Routes */}
           <Route path="/user/find/doctor" element={
             <ProtectedRoute isAuthenticate={isAuthenticate} user={user}>
-              <DoctorListPage />
+              <UserIndex />
             </ProtectedRoute>
           } />
 

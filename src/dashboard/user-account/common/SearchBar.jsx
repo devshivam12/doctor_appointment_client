@@ -22,14 +22,14 @@ const SearchBar = () => {
             <div className='flex items-center w-full'>
 
                 <div
-                    className={`flex items-center px-3 w-[500px] py-[0.5rem] border rounded-full transition-all duration-300 ${isFocus ? 'border-slate-400 shadow-md' : 'border-slate-200'
+                    className={`flex items-center px-3 w-[500px] py-[0.2rem] border rounded-full transition-all duration-300 ${isFocus ? 'border-slate-400 shadow-md' : 'border-slate-200'
                         }`}
                 >
 
                     <CiSearch size={30} className="text-lg text-slate-500" />
 
                     <input
-                        className="w-full px-3 py-[0.6rem] outline-none text-slate-700 bg-transparent"
+                        className="w-full px-3 py-[0.4rem] outline-none text-slate-700 bg-transparent"
                         onFocus={() => setIsFocus(true)}
                         onBlur={() => setIsFocus(false)}
                         type="text"
@@ -49,7 +49,7 @@ const SearchBar = () => {
                 <div className='ml-[2rem]'>
                     <button
                         onClick={() => setModel(!model)}
-                        className='w-full text-xl text-slate-700 font-medium'>
+                        className='w-full text-xl underline text-slate-700 font-medium'>
                         Advance Search
                     </button>
                 </div>
@@ -59,7 +59,7 @@ const SearchBar = () => {
                 {
                     model ? (
                         <div className='fixed inset-0 flex w-screen h-full items-center justify-center bg-black bg-opacity-40 z-50'>
-                            <div className='relative w-[700px] h-[500px] bg-white border border-slate-400 outline-none rounded-lg py-[2rem] flex flex-col'>
+                            <div className='relative w-[700px] h-[500px] bg-white border border-slate-400 outline-none rounded-[1rem] py-[2rem] flex flex-col'>
                                 <div className='flex items-center justify-between py-[0.4rem] px-[2rem] border-b border-b-slate-200'>
                                     <div>
                                         <h1 className='text-3xl font-semibold'>Advance Search</h1>
@@ -198,9 +198,9 @@ const SearchBar = () => {
 
                                 <div className='flex items-center justify-end px-[2rem] border-t border-t-slate-200'>
                                     <div className='mt-[1rem] gap-10'>
-                                        <button 
-                                        onClick={() => setModel(false)}
-                                        className='px-[0.7rem] py-[.5rem] text-blue-900 font-bold'>Cancel</button>
+                                        <button
+                                            onClick={() => setModel(false)}
+                                            className='px-[0.7rem] py-[.5rem] text-blue-900 font-bold'>Cancel</button>
                                         <button className='bg-primaryColor py-[8px] px-[20px] rounded-[10px] text-white font-[600]  hover:bg-blue-700'>Search</button>
                                     </div>
                                 </div>
