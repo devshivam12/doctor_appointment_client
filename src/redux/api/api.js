@@ -8,7 +8,7 @@ export const api = createApi({
     endpoints: (build) => ({
         getPatient: build.query({
             query: () => '/user/profile/me',
-            credentials : 'include',
+            credentials: 'include',
             providesTags: ['Patient']
         }),
         getDoctor: build.query({
@@ -16,12 +16,25 @@ export const api = createApi({
             providesTags: ['Doctor']
         }),
         getAllDoctor: build.query({
-            query: () => '/doctor/',
+            query: ({ query, specialization, minRating, minPrice, maxRating, maxPrice, location, page = 1, limit = 10 }) => ({
+                url: '/doctor',
+                params: {
+                    ...(query && { query }),
+                    ...(specialization && { specialization }),
+                    ...(maxPrice && { maxPrice }),
+                    ...(minPrice && { minPrice }),
+                    ...(maxRating && { maxRating }),
+                    ...(minRating && { minRating }),
+                    ...(location && { location }),
+                    page,
+                    limit
+                }
+            }),
             providesTags: ['Doctor']
         }),
-        getUserDetails : build.query({
-            query : (id) => `/user/${id}`,
-            providesTags : ['Patient']
+        getUserDetails: build.query({
+            query: (id) => `/user/${id}`,
+            providesTags: ['Patient']
         })
     })
 })

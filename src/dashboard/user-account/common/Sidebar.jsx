@@ -132,34 +132,42 @@ const location = [
 
 const ratings = [
     {
-        value: "0 to 2 rating",
-        label: "0 to 2 Rating"
+        value: "less then 3.5",
+        label: "Less then 3.5"
     },
     {
-        value: "2 to 3.5 rating",
-        label: "2 to 3.5 Rating"
+        value: "less then 4",
+        label: "Less then 4"
     },
     {
-        value: "3 to 4.5 rating",
-        label: "3 to 4.5 Rating"
+        value: "less then 4.5",
+        label: "Less then 4.5"
     },
     {
-        value: "4 to 5 rating",
-        label: "4 to 5 Rating"
-    },
-    {
-        value: "5 rating",
-        label: "5 Rating"
+        value: "Exactly 5",
+        label: "Exactly 5"
     }
 ]
 
-const Sidebar = () => {
+const Sidebar = ({ onFilterChange }) => {
     const [specializationOpen, setSpecializationOpen] = useState(false);
     const [locationOpen, setLocationOpen] = useState(false);
     const [specializationValue, setSpecializationValue] = useState("");
     const [locationValue, setLocationValue] = useState("");
     const [ratingOpen, setRatingOpen] = useState(false)
     const [ratingValue, setRatingValue] = useState("")
+    const [experience, setExperience] = useState("")
+
+    const handleSortChange = () => {
+        setSort(value)
+        onFilterChange({ sort: value })
+    }
+
+    const handleExperienceChange = (value) => {
+        setExperience(value);
+        onFilterChange({ experience: value })
+    }
+
     return (
 
         <div className='block'>
@@ -219,34 +227,42 @@ const Sidebar = () => {
                 <h2 className='my-4 font-semibold text-lg'>Experience Level</h2>
                 <div className='block space-y-5'>
                     <div className="flex items-center space-x-2">
-                        <Checkbox id="terms" />
+                        <Checkbox
+                            id="experience-0-5"
+                            checked={experience === '0-5'}
+                            onCheckedChange={() => handleExperienceChange('0-5')}
+                        />
                         <label
-                            htmlFor="terms"
+                            htmlFor="experience-0-5"
                             className="text-md font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                         >
                             0-5 Years
                         </label>
                     </div>
                     <div className="flex items-center space-x-2">
-                        <Checkbox id="terms" />
+                        <Checkbox
+                            id="experience-5-10"
+                            checked={experience === '5-10'}
+                            onCheckedChange={() => handleExperienceChange('5-10')}
+                        />
                         <label
-                            htmlFor="terms"
+                            htmlFor="experience-5-10"
                             className="text-md font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                         >
                             5-10 Years
                         </label>
                     </div>
                     <div className="flex items-center space-x-2">
-                        <Checkbox id="terms" />
-                        <label
-                            htmlFor="terms"
-                            className="text-md font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                            10+ Years
-                        </label>
+                        <Checkbox
+                            id="experience-10+"
+                            checked={experience === '10+'}
+                            onCheckedChange={() => handleExperienceChange('10+')}
+                        />
+                        <label htmlFor="experience-10+" className="text-md font-medium leading-none">10+ Years</label>
                     </div>
                 </div>
             </div>
+
 
             {/* Cosultaion Type */}
 
