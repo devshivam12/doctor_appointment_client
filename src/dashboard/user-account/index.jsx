@@ -38,8 +38,9 @@ const DoctorListPage = () => {
   console.log("doctorData", doctorData)
 
   const updateFilter = (newFilter) => {
-    setFilterData(prev => ({ ...prev, ...newFilter }))
+    setFilterData((prev) => ({ ...prev, ...newFilter }))
   }
+  console.log("filterData", filterData)
 
   useEffect(() => {
     refetch()

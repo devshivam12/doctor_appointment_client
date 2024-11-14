@@ -181,7 +181,7 @@ const DoctorListing = ({ doctorData, isLoading, isError }) => {
                             <div className='flex items-center space-x-2 text-sm'>
                                 <p className='text-slate-600'>Consultation Type</p>
                                 <div className='flex space-x-2 text-slate-700'>
-                                    {data.consultaion_type.map((type, index) => (
+                                    {data.consultaion_type?.map((type, index) => (
                                         <span className='px-[0.5rem] py-[0.3rem] bg-slate-200 rounded-lg text-slate-600 text-sm font-bold ' key={index}>{type}</span>
                                     ))}
                                 </div>
@@ -195,7 +195,7 @@ const DoctorListing = ({ doctorData, isLoading, isError }) => {
                                 <div className='ml-1'>
                                     <div className='flex space-x-2 text-slate-700'>
                                         {
-                                            data.availability.map((type, index) => (
+                                            data.availability?.map((type, index) => (
                                                 <span key={index} className='px-[0.5rem] py-[0.3rem] bg-slate-200 rounded-lg text-slate-600 text-sm font-bold '>{type}</span>
                                             ))
                                         }

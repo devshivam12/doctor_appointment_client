@@ -19,6 +19,8 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { Checkbox } from "@/components/ui/checkbox"
+import { MdPhotoSizeSelectLarge } from 'react-icons/md';
+import { expression } from '@cloudinary/url-gen/qualifiers/expression';
 
 
 const specializations = [
@@ -64,6 +66,10 @@ const specializations = [
 ];
 
 const location = [
+    {
+        value: "new york",
+        label: "New York"
+    },
     {
         value: "africa",
         label: "Africa"
@@ -132,31 +138,34 @@ const location = [
 
 const ratings = [
     {
-        value: "less then 3.5",
-        label: "Less then 3.5"
+        value: "less than 3.5",
+        label: "Less than 3.5"
     },
     {
-        value: "less then 4",
-        label: "Less then 4"
+        value: "less than 4",
+        label: "Less than 4"
     },
     {
-        value: "less then 4.5",
-        label: "Less then 4.5"
+        value: "less than 4.5",
+        label: "Less than 4.5"
     },
     {
-        value: "Exactly 5",
+        value: "exactly 5",
         label: "Exactly 5"
     }
 ]
 
 const Sidebar = ({ onFilterChange }) => {
+
     const [specializationOpen, setSpecializationOpen] = useState(false);
-    const [locationOpen, setLocationOpen] = useState(false);
     const [specializationValue, setSpecializationValue] = useState("");
+    const [locationOpen, setLocationOpen] = useState(false);
     const [locationValue, setLocationValue] = useState("");
     const [ratingOpen, setRatingOpen] = useState(false)
     const [ratingValue, setRatingValue] = useState("")
     const [experience, setExperience] = useState("")
+
+    console.log("specializationValue", specializationValue)
 
     const handleSortChange = () => {
         setSort(value)
@@ -166,7 +175,54 @@ const Sidebar = ({ onFilterChange }) => {
     const handleExperienceChange = (value) => {
         setExperience(value);
         onFilterChange({ experience: value })
+        console.log("experience : value",{experience : value})
     }
+
+    const handleLocationSelect = (item) => {
+        const selectedValue = item.value === locationValue ? "" : item.value;
+        setLocationValue(selectedValue);
+        onFilterChange({ location: selectedValue });
+        setLocationOpen(false);
+    };
+
+    const handleSpecializationSelect = (item) => {
+        const selectedValue = item.value === specializationValue ? "" : item.value;
+        setSpecializationValue(selectedValue);
+        onFilterChange({ specialization: selectedValue });
+        setSpecializationOpen(false);
+    };
+
+    const handleRatingSlect = (item) => {
+        const selectedValue = item.value === ratingValue ? "" : item.value;
+        setRatingValue(selectedValue);
+        let minRating, maxRating
+
+        if (selectedValue === "less than 3.5") {
+            minRating = 0;
+            maxRating = 3.5
+        }
+        else if (selectedValue === "less than 3") {
+            minRating = 0;
+            maxRating = 3
+        }
+        else if (selectedValue === "less than 4") {
+            minRating = 0;
+            maxRating = 4
+        }
+        else if (selectedValue === "exactly 5") {
+            minRating = 5;
+            maxRating = 5
+        }
+        else {
+            minRating = undefined;
+            maxRating = undefined
+        }
+        onFilterChange({ minRating, maxRating });
+        console.log({ minRating, maxRating })
+        setRatingOpen(false)
+    }
+
+    
 
     return (
 
@@ -185,7 +241,7 @@ const Sidebar = ({ onFilterChange }) => {
                             className="w-[250px] justify-between"
                         >
                             {specializationValue
-                                ? specializations.find((item) => item.value === value)?.label
+                                ? specializations.find((item) => item.value === specializationValue)?.label
                                 : "Select specialiast..."}
                             <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
@@ -200,10 +256,7 @@ const Sidebar = ({ onFilterChange }) => {
                                         <CommandItem
                                             key={specialization.value}
                                             value={specialization.value}
-                                            onSelect={(currentValue) => {
-                                                setSpecializationValue(currentValue === specializationValue ? "" : currentValue)
-                                                setSpecializationOpen(false)
-                                            }}
+                                            onSelect={() => handleSpecializationSelect(specialization)}
                                         >
                                             {specialization.label}
                                             <CheckIcon
@@ -356,7 +409,7 @@ const Sidebar = ({ onFilterChange }) => {
                             className="w-[250px] justify-between"
                         >
                             {locationValue
-                                ? location.find((location) => location.value === value)?.label
+                                ? location.find((location) => location.value === locationValue)?.label
                                 : "Select location..."}
                             <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
@@ -371,10 +424,7 @@ const Sidebar = ({ onFilterChange }) => {
                                         <CommandItem
                                             key={item.value}
                                             value={item.value}
-                                            onSelect={(currentValue) => {
-                                                setLocationValue(currentValue === locationValue ? "" : currentValue);
-                                                setLocationOpen(false);
-                                            }}
+                                            onSelect={() => handleLocationSelect(item)}
                                         >
                                             {item.label}
                                             <CheckIcon
@@ -449,7 +499,7 @@ const Sidebar = ({ onFilterChange }) => {
                             className="w-[250px] justify-between"
                         >
                             {ratingValue
-                                ? ratings.find((item) => item.value === value)?.label
+                                ? ratings.find((item) => item.value === ratingValue)?.label
                                 : "Select rating..."}
                             <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
@@ -464,10 +514,7 @@ const Sidebar = ({ onFilterChange }) => {
                                         <CommandItem
                                             key={rating.value}
                                             value={rating.value}
-                                            onSelect={(currentValue) => {
-                                                setRatingValue(currentValue === ratingValue ? "" : currentValue)
-                                                setRatingOpen(false)
-                                            }}
+                                            onSelect={() => handleRatingSlect(rating)}
                                         >
                                             {rating.label}
                                             <CheckIcon
