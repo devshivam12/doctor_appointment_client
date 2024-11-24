@@ -16,7 +16,7 @@ export const api = createApi({
             providesTags: ['Doctor']
         }),
         getAllDoctor: build.query({
-            query: ({ query, specialization, minRating, minPrice, maxRating, maxPrice, location, page = 1, limit = 10 }) => ({
+            query: ({ query, specialization, minRating, minPrice, maxRating, experience, consultation, maxPrice, location, page = 1, limit = 10 }) => ({
                 url: '/doctor',
                 params: {
                     ...(query && { query }),
@@ -25,7 +25,9 @@ export const api = createApi({
                     ...(minPrice && { minPrice }),
                     ...(maxRating && { maxRating }),
                     ...(minRating && { minRating }),
+                    ...(consultation && { consultation }),
                     ...(location && { location }),
+                    ...(experience && { experience }),
                     page,
                     limit
                 }

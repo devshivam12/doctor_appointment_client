@@ -164,6 +164,7 @@ const Sidebar = ({ onFilterChange }) => {
     const [ratingOpen, setRatingOpen] = useState(false)
     const [ratingValue, setRatingValue] = useState("")
     const [experience, setExperience] = useState("")
+    const [consultationFees, setConsultationFees] = useState("")
 
     console.log("specializationValue", specializationValue)
 
@@ -173,11 +174,18 @@ const Sidebar = ({ onFilterChange }) => {
     }
 
     const handleExperienceChange = (value) => {
-        setExperience(value);
-        onFilterChange({ experience: value })
-        console.log("experience : value",{experience : value})
+        const newExperience = experience === value ? "" : value;
+        setExperience(newExperience);
+        onFilterChange({ experience: newExperience });
+        console.log("Experience value sent to filter:", newExperience);
     }
-
+    const handleConsultationType = (value) => {
+        const newConsultationFees = consultationFees === value ? "" : value;
+        setConsultationFees(newConsultationFees);
+        onFilterChange({consultation : newConsultationFees})
+        console.log("Consultation", consultationFees) 
+    }
+    
     const handleLocationSelect = (item) => {
         const selectedValue = item.value === locationValue ? "" : item.value;
         setLocationValue(selectedValue);
@@ -222,7 +230,7 @@ const Sidebar = ({ onFilterChange }) => {
         setRatingOpen(false)
     }
 
-    
+
 
     return (
 
@@ -358,7 +366,7 @@ const Sidebar = ({ onFilterChange }) => {
                 <h2 className='my-4 font-semibold text-lg'>Consultation Fees</h2>
                 <div className='block space-y-5'>
                     <div className="flex items-center space-x-2">
-                        <Checkbox id="terms" />
+                        <Checkbox id="consultation" />
                         <label
                             htmlFor="terms"
                             className="text-md font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
